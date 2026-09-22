@@ -1,0 +1,28 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.log
+
+# Vercel
+.vercel/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
