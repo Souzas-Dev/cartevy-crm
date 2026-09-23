@@ -3,21 +3,32 @@
 **by Souzas Dev**
 
 > Sua carteira comercial em movimento.
+
 ## Visão geral
 
-O Cartevy CRM é um projeto documental e funcional em fase inicial, voltado ao acompanhamento comercial de clientes, pedidos, vendas, follow-ups e encomendas.
+O Cartevy CRM é uma aplicação web em desenvolvimento voltada ao acompanhamento comercial de clientes, pedidos, vendas, follow-ups e encomendas.
 
-A proposta principal é centralizar informações que hoje permanecem dispersas e facilitar a rotina de um vendedor sem substituir sistemas especializados em faturamento, estoque, logística ou gestão financeira.
+A proposta principal é centralizar informações da rotina comercial, preservar histórico e facilitar o acompanhamento de oportunidades sem substituir sistemas especializados em faturamento, estoque, logística ou gestão financeira.
 
 ## Estado atual
 
-O projeto está em estágio predominantemente documental.
+O projeto está na **Fase 3 — Persistência e domínio**, em andamento.
 
-- contexto do produto consolidado;
-- escopo do MVP definido;
-- requisitos principais estruturados;
-- roadmap inicial organizado;
-- implementação técnica ainda não iniciada.
+Já estão concluídas:
+
+- fundação documental;
+- estrutura técnica do projeto;
+- fundação navegável da aplicação;
+- modelagem inicial do domínio comercial;
+- persistência PostgreSQL gerenciada pelo Supabase;
+- integração com Prisma 7;
+- migrations iniciais e hardening do banco;
+- RLS habilitado nas tabelas da aplicação;
+- validações e testes iniciais de domínio;
+- CI com GitHub Actions;
+- proteção da branch `main` com Pull Request e check `Quality` obrigatórios.
+
+A Fase 3 ainda não está concluída. Permanecem para esta etapa a consolidação da camada de persistência do domínio, serviços/repositórios, seed controlado e testes de persistência antes da entrada no núcleo comercial.
 
 ## Escopo resumido
 
@@ -33,43 +44,90 @@ O foco do produto é apoiar a rotina comercial com:
 - indicadores comerciais;
 - importação de dados de pedidos por PDF.
 
-O CRM não é um ERP e não cobre faturamento, estoque, logística, financeiro ou gestão de fornecedores.
+O Cartevy CRM não é um ERP e não cobre faturamento, estoque, logística, financeiro ou gestão de fornecedores como módulos centrais.
 
 ## Estrutura principal
 
 ```text
-crm-vendas/
-├── README.md
+cartevy-crm/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── app/
+│   ├── prisma/
+│   ├── src/
+│   │   ├── app/
+│   │   ├── components/
+│   │   ├── domain/
+│   │   └── lib/
+│   └── ...
 ├── docs/
 │   ├── 00-governanca/
-│   │   ├── INDICE.md
-│   │   ├── PADRAO-DOCUMENTACAO.md
-│   │   └── CHANGELOG.md
 │   ├── 01-produto/
-│   │   ├── VISAO-PRODUTO.md
-│   │   ├── ESCOPO-MVP.md
-│   │   ├── REQUISITOS.md
-│   │   └── ROADMAP.md
-│   ├── 02-arquitetura/
-│   │   ├── ARQUITETURA.md
-│   │   └── decisoes/
-│   │       └── README.md
-│   ├── 03-interface/
-│   ├── 04-integracoes/
-│   ├── 05-deploy/
-│   └── 06-operacao/
+│   └── 02-arquitetura/
+│       └── decisoes/
+└── supabase/
 ```
+
+## Fundação técnica atual
+
+A aplicação principal utiliza:
+
+- Next.js 16.3.6;
+- React 19.3.0;
+- TypeScript 6.0.3;
+- Tailwind CSS 4.3.3;
+- PostgreSQL gerenciado pelo Supabase;
+- Prisma 7.10.0;
+- `@prisma/adapter-pg`;
+- Zod para validação de entrada;
+- Vitest para testes;
+- GitHub Actions para integração contínua.
+
+A autenticação ainda não faz parte da implementação atual e permanece planejada para a Fase 4.
+
+## Persistência e domínio
+
+A modelagem inicial contempla:
+
+- Organization;
+- AppUser;
+- Customer;
+- Order;
+- FollowUp;
+- Backorder.
+
+A estrutura foi preparada para associação por organização desde a fundação, com chaves e relacionamentos compostos para reduzir o risco de referências entre organizações diferentes.
+
+RLS está habilitado nas tabelas da aplicação, mas policies de acesso ainda não foram criadas. Essa decisão é intencional até que autenticação e autorização sejam implementadas na Fase 4.
+
+## Qualidade e fluxo de contribuição
+
+O workflow `CI` executa, entre outros gates:
+
+- instalação reproduzível com `npm ci`;
+- validação e geração do Prisma Client;
+- testes automatizados;
+- ESLint;
+- build de produção;
+- auditoria de dependências de produção com bloqueio para vulnerabilidades críticas.
+
+A branch `main` é protegida. O fluxo esperado é:
+
+`branch de trabalho → Pull Request → Quality verde → squash merge → main`.
 
 ## Documentação
 
-- [docs/00-governanca/PADRAO-DOCUMENTACAO.md](docs/00-governanca/PADRAO-DOCUMENTACAO.md)
-- [docs/00-governanca/INDICE.md](docs/00-governanca/INDICE.md)
-- [docs/00-governanca/CHANGELOG.md](docs/00-governanca/CHANGELOG.md)
-- [docs/01-produto/VISAO-PRODUTO.md](docs/01-produto/VISAO-PRODUTO.md)
-- [docs/01-produto/ESCOPO-MVP.md](docs/01-produto/ESCOPO-MVP.md)
-- [docs/01-produto/REQUISITOS.md](docs/01-produto/REQUISITOS.md)
-- [docs/01-produto/ROADMAP.md](docs/01-produto/ROADMAP.md)
-- [docs/02-arquitetura/ARQUITETURA.md](docs/02-arquitetura/ARQUITETURA.md)
+- [Padrão de Documentação](docs/00-governanca/PADRAO-DOCUMENTACAO.md)
+- [Índice Documental](docs/00-governanca/INDICE.md)
+- [Changelog Documental](docs/00-governanca/CHANGELOG.md)
+- [Visão do Produto](docs/01-produto/VISAO-PRODUTO.md)
+- [Escopo do MVP](docs/01-produto/ESCOPO-MVP.md)
+- [Requisitos do Produto](docs/01-produto/REQUISITOS.md)
+- [Roadmap do Produto](docs/01-produto/ROADMAP.md)
+- [Arquitetura da Aplicação](docs/02-arquitetura/ARQUITETURA.md)
+- [ADR-001 — Fundação Técnica Inicial da Aplicação](docs/02-arquitetura/decisoes/FUNDACAO-TECNICA-INICIAL.md)
+- [ADR-002 — Persistência PostgreSQL Gerenciada pelo Supabase](docs/02-arquitetura/decisoes/PERSISTENCIA-POSTGRESQL-SUPABASE.md)
 
 ## Princípios
 
@@ -81,29 +139,23 @@ crm-vendas/
 - preparação para expansão futura sem complexidade prematura;
 - proteção de dados e redução de riscos operacionais.
 
-## Roadmap resumido
-
-A evolução do projeto segue por fases documentadas em [docs/01-produto/ROADMAP.md](docs/01-produto/ROADMAP.md), começando pela base documental e pela estrutura técnica, seguida pela fundamentação da aplicação, persistência, autenticação e núcleo comercial.
-
-A importação de pedidos por PDF e as integrações condicionadas de Telegram e monitor local permanecem planejadas, mas não como requisitos obrigatórios do MVP sem confirmação formal.
-
 ## Estado das funcionalidades
 
 | Área | Estado |
 |---|---|
 | Fundação documental | Concluída |
-| Estrutura técnica do projeto | Próxima |
-| Aplicação web principal | Não iniciada |
-| Persistência | Não iniciada |
+| Estrutura técnica do projeto | Concluída |
+| Fundação da aplicação | Concluída |
+| Persistência e domínio | Em andamento |
 | Autenticação | Não iniciada |
-| Núcleo comercial | Não iniciada |
+| Núcleo comercial | Não iniciado |
 | Importação de PDFs | Planejada |
 | Telegram | Condicionado |
 | Monitor local | Condicionado |
-| Deploy | Não iniciada |
+| Deploy | Não iniciado |
 
 ## Observação
 
-Este repositório está, no momento, orientado à documentação e ao alinhamento do produto. Nenhuma funcionalidade deve ser tratada como implementada sem confirmação formal do desenvolvimento e validação correspondente.
+Funcionalidades e capacidades devem ser tratadas conforme seu estado real de implementação.
 
-A evolução para múltiplos usuários, vendedores e organizações é uma direção futura, mas não substitui o foco atual do MVP em uso individual e operação comercial simples.
+A preparação multi-tenant existente na modelagem não substitui autenticação, autorização nem filtros server-side por organização. Esses controles serão implementados e validados nas fases correspondentes.

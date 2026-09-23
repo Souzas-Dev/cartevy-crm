@@ -1,7 +1,7 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.6
+**Versão:** 0.7
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 23/09/2026
@@ -16,13 +16,11 @@ Ele não substitui os requisitos detalhados e deve ser usado como referência de
 
 ## 2. Estado atual
 
-O projeto concluiu a **Fase 2 — Fundação da aplicação**.
+O projeto concluiu a **Fase 2 — Fundação da aplicação** e está em andamento na **Fase 3 — Persistência e domínio**.
 
-A aplicação possui uma fundação técnica, arquitetural e visual navegável para os módulos iniciais do CRM, com estrutura compartilhada de interface e comportamento consistente entre as rotas.
+A fundação visual e navegável entregue na Fase 2 permanece válida, incluindo:
 
-A fundação entregue nesta fase inclui:
-
-- Route Group `(crm)` para organização da aplicação principal;
+- Route Group `(crm)`;
 - shell compartilhado;
 - Dashboard;
 - Pedidos;
@@ -30,23 +28,36 @@ A fundação entregue nesta fase inclui:
 - Follow-ups;
 - Encomendas;
 - Configurações;
-- sidebar adaptativa oculta por padrão;
-- abertura da sidebar por botão ou proximidade do cursor;
+- sidebar adaptativa;
 - identificação visual da rota ativa;
-- suporte aos modos claro e escuro;
+- modos claro e escuro;
 - persistência local da preferência de tema;
-- tipografia híbrida para identidade e elementos operacionais;
-- componentes reutilizáveis de interface;
-- comportamento básico de foco e teclado;
-- fechamento da sidebar pela tecla Escape;
-- estrutura responsiva inicial;
-- validação por lint, build de produção e navegação manual.
+- componentes reutilizáveis;
+- responsividade inicial;
+- acessibilidade básica;
+- validação por lint, build e navegação manual.
 
-A paleta neutra utilizada atualmente é provisória e não representa uma definição permanente da identidade visual do produto. A escolha de uma paleta definitiva poderá ser realizada posteriormente sem alterar a fundação funcional estabelecida nesta fase.
+Na Fase 3 já foram implementadas e validadas as seguintes capacidades:
 
-Persistência de dados, autenticação, regras completas de domínio e funcionalidades comerciais permanecem fora do escopo concluído da Fase 2.
+- PostgreSQL gerenciado pelo Supabase como persistência da aplicação;
+- Prisma 7 como ORM e mecanismo de migrations;
+- conexão de runtime por Supavisor Transaction Pooler;
+- conexão de migrations por Supavisor Session Pooler;
+- verificação TLS com CA do Supabase e `rejectUnauthorized: true`;
+- modelagem inicial de Organization, AppUser, Customer, Order, FollowUp e Backorder;
+- preparação multi-tenant por `organizationId` e relacionamentos compostos;
+- constraints de integridade para documentos, telefone, valores e conclusão de follow-ups;
+- migration inicial do domínio;
+- migration adicional de hardening para RLS e índices de foreign keys;
+- RLS habilitado nas seis tabelas de aplicação e na tabela `_prisma_migrations`;
+- testes iniciais de normalização, validação, invariantes e classificação de follow-ups;
+- integração contínua pelo GitHub Actions;
+- proteção da branch `main`, exigindo Pull Request e o check `Quality`.
 
-A próxima etapa planejada é a **Fase 3 — Persistência e domínio**, que ainda não foi iniciada.
+A Fase 3 ainda não está concluída. Permanecem nesta etapa a consolidação da camada de persistência do domínio, serviços/repositórios, seed controlado e testes de persistência suficientes para sustentar o núcleo comercial.
+
+A autenticação permanece fora do escopo da Fase 3 e será tratada na Fase 4.
+
 ## 3. Fases do projeto
 
 ### Fase 0 — Fundação documental
@@ -54,6 +65,7 @@ A próxima etapa planejada é a **Fase 3 — Persistência e domínio**, que ain
 **Status:** concluída
 
 Objetivo:
+
 - consolidar a visão do produto;
 - definir o escopo do MVP;
 - registrar requisitos iniciais;
@@ -64,11 +76,11 @@ Objetivo:
 **Status:** concluída
 
 Objetivo:
+
 - iniciar a organização do repositório;
 - preparar a base técnica do projeto;
 - definir a estrutura inicial da aplicação;
 - estabelecer a base para o desenvolvimento futuro.
-
 
 Progresso registrado:
 
@@ -94,44 +106,67 @@ Objetivo:
 
 Entregas concluídas:
 
-- criação do Route Group `(crm)` para organização da área principal;
+- criação do Route Group `(crm)`;
 - implementação do shell compartilhado das rotas do CRM;
 - criação das rotas de Dashboard, Pedidos, Clientes, Follow-ups, Encomendas e Configurações;
 - implementação da navegação principal;
 - identificação visual da rota ativa;
 - implementação da estrutura inicial do Dashboard;
-- implementação de sidebar adaptativa oculta por padrão;
-- abertura da sidebar por botão ou proximidade do cursor no desktop;
-- fechamento da sidebar pelo botão, área externa no mobile e tecla Escape;
+- sidebar adaptativa com comportamento para desktop e mobile;
 - gerenciamento básico de foco durante abertura e fechamento do menu;
-- implementação dos modos claro e escuro;
+- modos claro e escuro;
 - persistência local da preferência de tema;
-- adoção de tipografia híbrida para identidade e elementos operacionais;
-- criação dos componentes reutilizáveis `PageHeader`, `Surface` e `ModulePlaceholder`;
-- redução da duplicação estrutural entre os módulos;
-- preparação responsiva inicial da interface;
+- tipografia híbrida;
+- componentes reutilizáveis `PageHeader`, `Surface` e `ModulePlaceholder`;
+- preparação responsiva inicial;
 - validação manual da navegação, sidebar e alternância de tema;
 - validação técnica por ESLint e build de produção.
 
-A paleta neutra utilizada durante esta fase permanece provisória. A definição de uma identidade cromática definitiva será tratada posteriormente conforme a evolução visual do produto.
+A paleta neutra utilizada durante esta fase permanece provisória.
 
-A conclusão desta fase não inclui persistência, autenticação, regras completas de domínio, CRUD comercial ou integrações externas.
 ### Fase 3 — Persistência e domínio
 
-**Status:** futura
+**Status:** em andamento
 
 Objetivo:
+
 - modelar os dados principais;
 - definir persistência e integridade;
-- estabelecer as regras de negócio centrais.
+- estabelecer as regras de negócio centrais;
+- preparar uma base segura para o núcleo comercial.
+
+Entregas já concluídas nesta fase:
+
+- escolha arquitetural de PostgreSQL gerenciado pelo Supabase;
+- integração do Prisma 7 com PostgreSQL;
+- schema inicial do domínio;
+- migrations versionadas;
+- constraints de integridade;
+- RLS habilitado desde a fundação;
+- índices adicionais para foreign keys compostas;
+- testes iniciais de domínio;
+- CI no GitHub Actions;
+- proteção da branch `main`.
+
+Pendências da fase:
+
+- seed controlado;
+- camada de persistência do domínio;
+- serviços/repositórios;
+- testes de persistência e isolamento por organização;
+- consolidação das regras de criação, consulta e atualização necessárias ao núcleo comercial.
+
+A autenticação e as policies de acesso associadas a identidades autenticadas permanecem fora desta fase.
 
 ### Fase 4 — Autenticação
 
 **Status:** futura
 
 Objetivo:
+
 - proteger o acesso às áreas internas;
 - associar registros a usuários e responsabilidades;
+- implementar autorização coerente com a separação por organização;
 - preparar a aplicação para evolução de uso individual para uso compartilhado.
 
 ### Fase 5 — Núcleo comercial
@@ -139,6 +174,7 @@ Objetivo:
 **Status:** futura
 
 Objetivo:
+
 - disponibilizar clientes, pedidos, histórico, follow-ups e encomendas;
 - consolidar o cotidiano operacional do CRM;
 - permitir uso real do sistema sem dependência de automações auxiliares.
@@ -148,6 +184,7 @@ Objetivo:
 **Status:** futura
 
 Objetivo:
+
 - reduzir a digitação manual;
 - extrair dados estruturados de pedidos em PDF;
 - validar e registrar informações relevantes;
@@ -158,6 +195,7 @@ Objetivo:
 **Status:** condicionada
 
 Objetivo:
+
 - implementar canais auxiliares apenas se a necessidade for confirmada;
 - manter Telegram e monitor local como capacidades planejadas, mas não obrigatórias para o MVP inicial.
 
@@ -166,6 +204,7 @@ Objetivo:
 **Status:** futura
 
 Objetivo:
+
 - preparar a aplicação para execução em ambiente real;
 - estabilizar a operação;
 - revisar documentação, segurança e uso em produção.
@@ -175,6 +214,7 @@ Objetivo:
 **Status:** futura
 
 Objetivo:
+
 - verificar se a solução atende ao escopo acordado;
 - confirmar estabilidade e maturidade do produto inicial;
 - registrar alterações finais antes da entrada em uso operacional.
@@ -187,7 +227,10 @@ A transição entre fases deve ocorrer somente quando:
 - os objetivos da fase seguinte estiverem claramente definidos;
 - o escopo permanecer coerente com PRD-001 e PRD-002;
 - as mudanças relevantes forem documentadas;
-- a evolução não introduzir complexidade desnecessária.
+- a evolução não introduzir complexidade desnecessária;
+- os gates técnicos aplicáveis estiverem aprovados.
+
+Para mudanças versionadas no repositório, a branch `main` deve permanecer protegida pelo fluxo de Pull Request e pelos checks de CI definidos para o projeto.
 
 ## 5. Evoluções posteriores ao MVP
 
@@ -202,20 +245,14 @@ Após a validação do MVP, poderão ser avaliadas evoluções como:
 - automações adicionais;
 - expansão do produto para uso mais amplo.
 
-Essas evoluções não devem ser tratadas como compromissos do MVP atual.
+A modelagem atual já prepara associações por organização e responsável, mas isso não transforma essas evoluções em funcionalidades concluídas.
 
 ## 6. Estado do documento
 
-A versão 0.6 registra a adoção oficial do nome **Cartevy CRM** para o produto anteriormente identificado por uma nomenclatura genérica de projeto.
+A versão 0.7 registra o início efetivo da **Fase 3 — Persistência e domínio**.
 
-A marca curta do produto passa a ser **Cartevy**, com assinatura institucional **by Souzas Dev** e posicionamento inicial expresso pelo slogan **“Sua carteira comercial em movimento”**.
+Nesta versão passam a constar como implementadas a fundação PostgreSQL/Supabase, a integração com Prisma 7, a modelagem inicial do domínio, as migrations, o hardening de RLS e índices, os testes iniciais de domínio e o pipeline de CI com proteção da branch `main`.
 
-A mudança é exclusivamente de nomenclatura e identidade do produto e não altera o escopo funcional definido no roadmap.
+A Fase 3 permanece **em andamento**.
 
-A **Fase 2 — Fundação da aplicação** permanece concluída.
-
-A **Fase 3 — Persistência e domínio** permanece como próxima etapa planejada e ainda não é considerada iniciada.
-
-A paleta visual atual continua provisória e poderá ser refinada posteriormente sem alterar a arquitetura funcional do produto.
-
-Telegram, monitor local, integração logística e demais integrações futuras ou condicionadas permanecem fora do compromisso obrigatório das etapas já concluídas.
+Autenticação, autorização completa, policies baseadas em identidade, CRUD comercial e demais entregas do núcleo comercial ainda não são consideradas concluídas.
