@@ -26,3 +26,4 @@ Thumbs.db
 
 # IDE
 .idea/
+app/next-env.d.ts

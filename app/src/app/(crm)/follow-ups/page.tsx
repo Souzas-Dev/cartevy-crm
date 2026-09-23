@@ -1,17 +1,17 @@
-export default function PedidosPage() {
+export default function FollowUpsPage() {
   return (
     <section className="space-y-6">
       <div>
         <p className="text-sm text-neutral-500">Operação comercial</p>
-        <h1 className="mt-1 text-3xl font-semibold">Pedidos</h1>
+        <h1 className="mt-1 text-3xl font-semibold">Follow-ups</h1>
         <p className="mt-2 text-neutral-600">
-          Área de acompanhamento dos pedidos comerciais.
+          Organização dos próximos contatos e acompanhamentos comerciais.
         </p>
       </div>
 
       <div className="rounded-lg border border-neutral-200 bg-white p-6">
         <p className="text-neutral-600">
-          A listagem, os filtros e o cadastro de pedidos serão implementados na fase correspondente ao núcleo comercial.
+          Os registros e estados de follow-up serão implementados junto às regras do domínio comercial.
         </p>
       </div>
     </section>
