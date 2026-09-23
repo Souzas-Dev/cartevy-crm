@@ -64,9 +64,15 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **ARC-001 — Arquitetura da Aplicação**
   Arquivo: [../02-arquitetura/ARQUITETURA.md](../02-arquitetura/ARQUITETURA.md)
-  Versão: 0.1
-  Status: Em revisão
+  Versão: 0.2
+  Status: Aprovado
   Finalidade: registrar as decisões arquiteturais conhecidas e sustentadas pelo projeto.
+
+- **ADR-001 — Fundação Técnica Inicial da Aplicação**
+  Arquivo: [../02-arquitetura/decisoes/FUNDACAO-TECNICA-INICIAL.md](../02-arquitetura/decisoes/FUNDACAO-TECNICA-INICIAL.md)
+  Versão: 0.1
+  Status: Aprovado
+  Finalidade: registrar a decisão sobre a fundação técnica inicial da aplicação.
 
 ### Recurso auxiliar
 

@@ -1,8 +1,8 @@
 # Arquitetura da Aplicação
 
 **Documento:** ARC-001 — Arquitetura da Aplicação
-**Versão:** 0.1
-**Status:** Em revisão
+**Versão:** 0.2
+**Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 22/09/2026
 
@@ -16,17 +16,23 @@ Ele não pretende estabelecer uma arquitetura definitiva para todos os cenários
 
 ## 2. Direção atual
 
-A aplicação principal é concebida como uma solução web, inicialmente simples e orientada ao MVP.
+A aplicação principal é uma solução web orientada ao MVP, estruturada inicialmente em uma única base de aplicação.
 
-As direções conhecidas são:
+A fundação técnica adotada está formalizada em `ADR-001 — Fundação Técnica Inicial da Aplicação` e utiliza:
 
-- aplicação web como principal interface do usuário;
-- arquitetura inicialmente simples e focada em produto mínimo viável;
-- aplicação principal podendo concentrar frontend e backend em uma mesma base inicial;
-- automações externas comunicando-se com a aplicação por interfaces controladas;
-- componentes de automação podendo utilizar Python;
-- evolução futura sem complexidade desnecessária;
-- manutenção da clareza entre domínio comercial, integrações e infraestrutura.
+- Next.js com App Router como framework principal da aplicação web;
+- React para construção da interface;
+- TypeScript como linguagem principal;
+- Tailwind CSS com PostCSS para a base de estilização;
+- ESLint para análise estática;
+- npm para gerenciamento de dependências;
+- diretório `app` como base inicial da aplicação principal.
+
+A arquitetura permanece intencionalmente simples nesta etapa, permitindo que frontend e capacidades de servidor coexistam na mesma aplicação enquanto não houver requisito concreto que justifique separação adicional.
+
+Componentes auxiliares poderão utilizar outras tecnologias, como Python, quando houver necessidade aprovada para processamento de PDF ou automações externas.
+
+Banco de dados, autenticação, hospedagem e infraestrutura definitiva ainda não foram formalizados e permanecem sujeitos a decisões arquiteturais próprias.
 
 ## 3. Escopo arquitetural
 
@@ -47,14 +53,21 @@ A arquitetura não deve ampliar o escopo da solução para áreas que não fazem
 
 ### 4.1 Aplicação principal
 
-A aplicação principal deve concentrar o núcleo do CRM, incluindo:
+A aplicação principal está estruturada no diretório `app` como uma aplicação Next.js com App Router, React e TypeScript.
 
-- interface de usuário;
-- regras de negócio;
-- persistência de dados estruturados;
-- autenticação básica;
-- consultas e filtros comerciais;
-- integração com fluxos de importação e automação.
+A fundação atualmente implementada compreende a configuração técnica da aplicação, o layout raiz, a rota inicial, estilos globais e as ferramentas de desenvolvimento necessárias para lint e build de produção.
+
+Conforme o produto evoluir, essa aplicação deverá concentrar o núcleo do CRM, incluindo:
+
+- interface e navegação do usuário;
+- regras de negócio da rotina comercial;
+- capacidades de servidor necessárias à aplicação;
+- persistência de dados estruturados, após decisão arquitetural própria;
+- autenticação e controle de acesso, após decisão arquitetural própria;
+- consultas, filtros e indicadores comerciais;
+- interfaces controladas para importações e automações auxiliares.
+
+A existência dessa responsabilidade arquitetural não significa que todas essas capacidades já estejam implementadas. Nesta etapa, somente a fundação técnica inicial da aplicação está disponível.
 
 ### 4.2 Automação externa
 
@@ -71,10 +84,19 @@ sem converter o sistema em um armazenamento documental permanente de todos os PD
 
 ## 5. Restrições atuais
 
-A arquitetura atual não formaliza fornecedores definitivos de banco de dados, autenticação, hospedagem ou infraestrutura.
+A fundação técnica inicial da aplicação está formalizada em `ADR-001 — Fundação Técnica Inicial da Aplicação`.
 
-Esses itens devem ser registrados em momento próprio, quando houver decisão documental clara e aprovada.
+Permanecem sem decisão arquitetural definitiva:
 
+- banco de dados e estratégia de persistência;
+- autenticação e controle de acesso;
+- hospedagem;
+- infraestrutura;
+- serviços externos que possam vir a compor a operação.
+
+Esses itens deverão ser formalizados em momento próprio, quando houver evidência e necessidade suficientes para sustentar a decisão.
+
+A arquitetura atual também não pressupõe separação antecipada em múltiplos serviços. Novos componentes deverão ser introduzidos somente quando requisitos reais justificarem a complexidade adicional.
 ## 6. Princípios arquiteturais
 
 - simplicidade adequada ao MVP;
@@ -86,6 +108,10 @@ Esses itens devem ser registrados em momento próprio, quando houver decisão do
 
 ## 7. Estado do documento
 
-Este documento representa a visão arquitetural inicial atualmente registrada para o projeto.
+A versão 0.2 atualiza a visão arquitetural para refletir a fundação técnica efetivamente implementada e formalizada em `ADR-001 — Fundação Técnica Inicial da Aplicação`.
 
-Decisões de infraestrutura ainda não foram formalizadas e, por isso, o documento permanece em revisão até que surja evidência suficiente para estabilizar escolhas futuras.
+A arquitetura vigente estabelece uma aplicação web inicialmente concentrada em uma única base Next.js, mantendo abertas as decisões que ainda não possuem evidência suficiente para formalização.
+
+Banco de dados, autenticação, hospedagem, infraestrutura e demais serviços externos permanecem sujeitos a decisões arquiteturais próprias conforme a evolução do projeto.
+
+A existência dessas decisões pendentes não invalida a arquitetura atualmente registrada e não implica compromisso antecipado com fornecedores ou soluções específicas.

@@ -31,6 +31,8 @@ Um ADR deverá ser considerado quando houver:
 
 ## 4. Estado atual
 
-O projeto ainda não possui ADRs definitivos.
+O projeto possui o seguinte ADR aprovado:
 
-Decisões importantes de infraestrutura e tecnologia permanecem pendentes de formalização, conforme registrado em `ARC-001 — Arquitetura da Aplicação`.
+- `ADR-001 — Fundação Técnica Inicial da Aplicação`, versão 0.1.
+
+Outras decisões importantes, especialmente relacionadas a banco de dados, autenticação, hospedagem e infraestrutura, permanecem pendentes de formalização conforme a evolução do projeto.
