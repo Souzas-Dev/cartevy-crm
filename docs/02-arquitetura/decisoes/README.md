@@ -2,7 +2,7 @@
 
 Este diretório é destinado ao registro de decisões arquiteturais relevantes do projeto Cartevy CRM.
 
-Ele funciona como orientação para os futuros ADRs e **não é, por si só, um ADR nem um documento controlado**.
+Ele funciona como orientação para os ADRs e **não é, por si só, um ADR nem um documento controlado**.
 
 ## 1. Finalidade
 
@@ -31,8 +31,9 @@ Um ADR deverá ser considerado quando houver:
 
 ## 4. Estado atual
 
-O projeto possui o seguinte ADR aprovado:
+O projeto possui os seguintes ADRs aprovados:
 
-- `ADR-001 — Fundação Técnica Inicial da Aplicação`, versão 0.1.
+- `ADR-001 — Fundação Técnica Inicial da Aplicação`, versão 0.1;
+- `ADR-002 — Persistência PostgreSQL Gerenciada pelo Supabase`, versão 0.1.
 
-Outras decisões importantes, especialmente relacionadas a banco de dados, autenticação, hospedagem e infraestrutura, permanecem pendentes de formalização conforme a evolução do projeto.
+Permanecem pendentes de formalização conforme a evolução do projeto decisões importantes relacionadas a autenticação, autorização, hospedagem da aplicação e infraestrutura definitiva de execução.

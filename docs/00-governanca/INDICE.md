@@ -4,7 +4,7 @@
 **Versão:** 0.2
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 22/09/2026
+**Última atualização:** 23/09/2026
 
 ---
 
@@ -56,7 +56,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **PRD-004 — Roadmap do Produto**
   Arquivo: [../01-produto/ROADMAP.md](../01-produto/ROADMAP.md)
-  Versão: 0.6
+  Versão: 0.7
   Status: Aprovado
   Finalidade: organizar as fases de evolução do projeto e sua progressão.
 
@@ -64,7 +64,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **ARC-001 — Arquitetura da Aplicação**
   Arquivo: [../02-arquitetura/ARQUITETURA.md](../02-arquitetura/ARQUITETURA.md)
-  Versão: 0.2
+  Versão: 0.3
   Status: Aprovado
   Finalidade: registrar as decisões arquiteturais conhecidas e sustentadas pelo projeto.
 
@@ -73,6 +73,12 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
   Versão: 0.1
   Status: Aprovado
   Finalidade: registrar a decisão sobre a fundação técnica inicial da aplicação.
+
+- **ADR-002 — Persistência PostgreSQL Gerenciada pelo Supabase**
+  Arquivo: [../02-arquitetura/decisoes/PERSISTENCIA-POSTGRESQL-SUPABASE.md](../02-arquitetura/decisoes/PERSISTENCIA-POSTGRESQL-SUPABASE.md)
+  Versão: 0.1
+  Status: Aprovado
+  Finalidade: formalizar PostgreSQL/Supabase, Prisma 7 e a estratégia de migrations da persistência.
 
 ### Recurso auxiliar
 
@@ -91,6 +97,8 @@ Esses itens permanecem previstos na estrutura documental e não devem ser tratad
 
 ## 6. Estado do documento
 
-Este índice foi criado para refletir a estrutura documental atual e para orientar a navegação pela documentação controlada do projeto.
+Este índice reflete a documentação controlada vigente do Cartevy CRM.
 
-Documentos futuros devem ser incorporados ao índice somente após a criação e validação do material correspondente.
+A atualização de 23/09/2026 sincroniza as versões de PRD-004 e ARC-001 e inclui ADR-002 após a formalização da fundação de persistência.
+
+Conforme GOV-001 seção 9.1, esta sincronização operacional não altera a versão do índice.
