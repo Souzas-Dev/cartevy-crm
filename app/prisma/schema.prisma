@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AppUserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum OrderOrigin {
+  MANUAL
+  PDF_IMPORT
+  TELEGRAM
+  LOCAL_MONITOR
+  INTEGRATION
+}
+
+enum FollowUpStatus {
+  PENDING
+  COMPLETED
+}
+
+enum BackorderStatus {
+  WAITING_PRODUCT
+  PRODUCT_AVAILABLE
+  CUSTOMER_NOTIFIED
+  COMPLETED
+}
+
+model Organization {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(160)
+  slug      String   @unique @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  users      AppUser[]
+  customers  Customer[]
+  orders     Order[]
+  followUps  FollowUp[]
+  backorders Backorder[]
+
+  @@map("organizations")
+}
+
+model AppUser {
+  id             String        @id @default(uuid()) @db.Uuid
+  organizationId String        @map("organization_id") @db.Uuid
+  authUserId     String?       @unique @map("auth_user_id") @db.Uuid
+  name           String        @db.VarChar(160)
+  email          String        @db.VarChar(254)
+  status         AppUserStatus @default(ACTIVE)
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+
+  customers  Customer[]  @relation("CustomerResponsibleUser")
+  orders     Order[]     @relation("OrderResponsibleUser")
+  followUps  FollowUp[]  @relation("FollowUpResponsibleUser")
+  backorders Backorder[] @relation("BackorderResponsibleUser")
+
+  @@unique([organizationId, email])
+  @@unique([id, organizationId])
+  @@index([organizationId, status])
+  @@map("app_users")
+}
+
+model Customer {
+  id                String   @id @default(uuid()) @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  responsibleUserId String?  @map("responsible_user_id") @db.Uuid
+  internalCode      String?  @map("internal_code") @db.VarChar(80)
+  name              String   @db.VarChar(200)
+  document          String?  @db.VarChar(14)
+  phone             String?  @db.VarChar(15)
+  notes             String?  @db.Text
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  responsibleUser AppUser?     @relation("CustomerResponsibleUser", fields: [responsibleUserId, organizationId], references: [id, organizationId], onDelete: Restrict)
+
+  orders    Order[]
+  followUps FollowUp[]
+
+  @@unique([id, organizationId])
+  @@unique([organizationId, internalCode])
+  @@unique([organizationId, document])
+  @@index([organizationId, phone])
+  @@index([organizationId, name])
+  @@index([organizationId, responsibleUserId])
+  @@index([responsibleUserId, organizationId])
+  @@map("customers")
+}
+
+model Order {
+  id                String      @id @default(uuid()) @db.Uuid
+  organizationId    String      @map("organization_id") @db.Uuid
+  customerId        String      @map("customer_id") @db.Uuid
+  responsibleUserId String?     @map("responsible_user_id") @db.Uuid
+  number            String      @db.VarChar(100)
+  orderedAt         DateTime    @map("ordered_at") @db.Date
+  total             Decimal     @db.Decimal(14, 2)
+  origin            OrderOrigin @default(MANUAL)
+  notes             String?     @db.Text
+  createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  customer        Customer     @relation(fields: [customerId, organizationId], references: [id, organizationId], onDelete: Restrict)
+  responsibleUser AppUser?     @relation("OrderResponsibleUser", fields: [responsibleUserId, organizationId], references: [id, organizationId], onDelete: Restrict)
+
+  followUps  FollowUp[]
+  backorders Backorder[]
+
+  @@unique([id, organizationId])
+  @@unique([organizationId, number])
+  @@index([organizationId, customerId])
+  @@index([customerId, organizationId])
+  @@index([organizationId, responsibleUserId])
+  @@index([responsibleUserId, organizationId])
+  @@index([organizationId, orderedAt])
+  @@map("orders")
+}
+
+model FollowUp {
+  id                String         @id @default(uuid()) @db.Uuid
+  organizationId    String         @map("organization_id") @db.Uuid
+  customerId        String         @map("customer_id") @db.Uuid
+  orderId           String?        @map("order_id") @db.Uuid
+  responsibleUserId String?        @map("responsible_user_id") @db.Uuid
+  title             String         @db.VarChar(200)
+  notes             String?        @db.Text
+  dueAt             DateTime       @map("due_at") @db.Timestamptz(3)
+  status            FollowUpStatus @default(PENDING)
+  completedAt       DateTime?      @map("completed_at") @db.Timestamptz(3)
+  createdAt         DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  customer        Customer     @relation(fields: [customerId, organizationId], references: [id, organizationId], onDelete: Restrict)
+  order           Order?       @relation(fields: [orderId, organizationId], references: [id, organizationId], onDelete: Restrict)
+  responsibleUser AppUser?     @relation("FollowUpResponsibleUser", fields: [responsibleUserId, organizationId], references: [id, organizationId], onDelete: Restrict)
+
+  @@index([organizationId, customerId])
+  @@index([customerId, organizationId])
+  @@index([organizationId, orderId])
+  @@index([orderId, organizationId])
+  @@index([organizationId, responsibleUserId])
+  @@index([responsibleUserId, organizationId])
+  @@index([organizationId, status, dueAt])
+  @@map("follow_ups")
+}
+
+model Backorder {
+  id                String          @id @default(uuid()) @db.Uuid
+  organizationId    String          @map("organization_id") @db.Uuid
+  orderId           String          @map("order_id") @db.Uuid
+  responsibleUserId String?         @map("responsible_user_id") @db.Uuid
+  description       String          @db.VarChar(500)
+  estimatedAt       DateTime?       @map("estimated_at") @db.Date
+  notes             String?         @db.Text
+  status            BackorderStatus @default(WAITING_PRODUCT)
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  order           Order        @relation(fields: [orderId, organizationId], references: [id, organizationId], onDelete: Restrict)
+  responsibleUser AppUser?     @relation("BackorderResponsibleUser", fields: [responsibleUserId, organizationId], references: [id, organizationId], onDelete: Restrict)
+
+  @@index([organizationId, orderId])
+  @@index([orderId, organizationId])
+  @@index([organizationId, responsibleUserId])
+  @@index([responsibleUserId, organizationId])
+  @@index([organizationId, status])
+  @@map("backorders")
+}

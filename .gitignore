@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+Local
 
 # Node / Next.js
 node_modules/
@@ -27,3 +28,6 @@ Thumbs.db
 # IDE
 .idea/
 app/next-env.d.ts
+
+# Prisma generated client
+app/src/generated/prisma/
