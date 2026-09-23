@@ -40,6 +40,8 @@ A finalidade é manter rastreabilidade sobre documentos aprovados, consolidaçõ
 - criação e aprovação do ADR-001 v0.1, formalizando a fundação técnica inicial da aplicação.
 
 - aprovação do ARC-001 v0.2, com atualização da arquitetura para refletir a fundação técnica implementada e as decisões ainda pendentes.
+- aprovação do PRD-004 v0.3, com conclusão da Fase 1 — Estrutura técnica do projeto e início da Fase 2 — Fundação da aplicação.
+
 ## 3. Estado do documento
 
 Este changelog representa a linha inicial de registro documental disponível para o projeto.

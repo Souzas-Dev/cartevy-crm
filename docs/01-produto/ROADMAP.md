@@ -1,7 +1,7 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.2
+**Versão:** 0.3
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 22/09/2026
@@ -16,13 +16,13 @@ Ele não substitui os requisitos detalhados e deve ser usado como referência de
 
 ## 2. Estado atual
 
-O projeto encontra-se na **Fase 1 — Estrutura técnica do projeto**, atualmente em andamento.
+O projeto encontra-se na **Fase 2 — Fundação da aplicação**, atualmente em andamento.
 
-A fundação documental está concluída e a base técnica inicial da aplicação foi implementada e validada, incluindo repositório Git, aplicação Next.js, TypeScript, ESLint, Tailwind CSS, PostCSS, App Router e build de produção.
+A **Fase 1 — Estrutura técnica do projeto** foi concluída após a implementação e validação da fundação técnica inicial, incluindo a estrutura Next.js, configuração das ferramentas de desenvolvimento e formalização da arquitetura vigente.
 
-As funcionalidades comerciais do CRM ainda não foram implementadas.
+A Fase 2 concentra a evolução da interface principal, da navegação e da estrutura inicial dos módulos do CRM.
 
-A **Fase 2 — Fundação da aplicação** permanece futura e deverá concentrar a evolução da interface, da navegação e dos módulos iniciais.
+As funcionalidades comerciais completas, a persistência de dados e a autenticação ainda não foram implementadas e permanecem previstas para as fases correspondentes do roadmap.
 
 ## 3. Fases do projeto
 
@@ -38,7 +38,7 @@ Objetivo:
 
 ### Fase 1 — Estrutura técnica do projeto
 
-**Status:** em andamento
+**Status:** concluída
 
 Objetivo:
 - iniciar a organização do repositório;
@@ -61,7 +61,7 @@ Progresso registrado:
 
 ### Fase 2 — Fundação da aplicação
 
-**Status:** futura
+**Status:** em andamento
 
 Objetivo:
 - criar a base da interface e da aplicação principal;
@@ -158,10 +158,10 @@ Essas evoluções não devem ser tratadas como compromissos do MVP atual.
 
 ## 6. Estado do documento
 
-A versão 0.2 atualiza o roadmap para refletir o início efetivo da **Fase 1 — Estrutura técnica do projeto**.
+A versão 0.3 registra a conclusão da **Fase 1 — Estrutura técnica do projeto** e o início da **Fase 2 — Fundação da aplicação**.
 
-Esta revisão registra a implementação e validação da fundação técnica inicial da aplicação, sem antecipar a conclusão da Fase 1 e sem alterar o escopo funcional definido para o MVP.
+A transição ocorre após a implementação e validação da fundação técnica inicial, a formalização da arquitetura vigente em `ARC-001 — Arquitetura da Aplicação` e a aprovação de `ADR-001 — Fundação Técnica Inicial da Aplicação`.
 
-A **Fase 1** permanece em andamento e a **Fase 2 — Fundação da aplicação** permanece futura.
+A Fase 2 passa a concentrar a construção da interface principal, da navegação e da estrutura inicial dos módulos do CRM, sem antecipar persistência, autenticação ou funcionalidades comerciais completas previstas para fases posteriores.
 
-Telegram e monitor local continuam condicionados e não devem ser tratados como requisitos obrigatórios da primeira entrega sem confirmação formal.
+Telegram, monitor local e demais integrações condicionadas permanecem fora do compromisso obrigatório desta etapa.
