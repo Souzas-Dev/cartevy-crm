@@ -56,7 +56,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **PRD-004 — Roadmap do Produto**
   Arquivo: [../01-produto/ROADMAP.md](../01-produto/ROADMAP.md)
-  Versão: 0.4
+  Versão: 0.5
   Status: Aprovado
   Finalidade: organizar as fases de evolução do projeto e sua progressão.
 

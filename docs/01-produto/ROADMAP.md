@@ -1,7 +1,7 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.4
+**Versão:** 0.5
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 22/09/2026
@@ -16,24 +16,37 @@ Ele não substitui os requisitos detalhados e deve ser usado como referência de
 
 ## 2. Estado atual
 
-O projeto encontra-se na **Fase 2 — Fundação da aplicação**, atualmente em andamento.
+O projeto concluiu a **Fase 2 — Fundação da aplicação**.
 
-A fundação técnica e arquitetural inicial está concluída e a aplicação já possui uma base navegável para os módulos previstos no CRM.
+A aplicação possui uma fundação técnica, arquitetural e visual navegável para os módulos iniciais do CRM, com estrutura compartilhada de interface e comportamento consistente entre as rotas.
 
-Nesta fase foram implementados o shell compartilhado da aplicação, a navegação entre os módulos iniciais, a estrutura visual do dashboard, a identificação da rota ativa, a sidebar adaptativa e os modos claro e escuro com persistência da preferência do usuário.
+A fundação entregue nesta fase inclui:
 
-As rotas iniciais disponíveis são:
-
+- Route Group `(crm)` para organização da aplicação principal;
+- shell compartilhado;
 - Dashboard;
 - Pedidos;
 - Clientes;
 - Follow-ups;
 - Encomendas;
-- Configurações.
+- Configurações;
+- sidebar adaptativa oculta por padrão;
+- abertura da sidebar por botão ou proximidade do cursor;
+- identificação visual da rota ativa;
+- suporte aos modos claro e escuro;
+- persistência local da preferência de tema;
+- tipografia híbrida para identidade e elementos operacionais;
+- componentes reutilizáveis de interface;
+- comportamento básico de foco e teclado;
+- fechamento da sidebar pela tecla Escape;
+- estrutura responsiva inicial;
+- validação por lint, build de produção e navegação manual.
 
-A interface utiliza tipografia híbrida, mantendo Times New Roman em elementos de identidade e títulos e fonte sem serifa nos elementos operacionais.
+A paleta neutra utilizada atualmente é provisória e não representa uma definição permanente da identidade visual do produto. A escolha de uma paleta definitiva poderá ser realizada posteriormente sem alterar a fundação funcional estabelecida nesta fase.
 
-As funcionalidades comerciais completas, a persistência de dados e a autenticação ainda não foram implementadas e permanecem previstas para as fases correspondentes do roadmap.
+Persistência de dados, autenticação, regras completas de domínio e funcionalidades comerciais permanecem fora do escopo concluído da Fase 2.
+
+A próxima etapa planejada é a **Fase 3 — Persistência e domínio**, que ainda não foi iniciada.
 ## 3. Fases do projeto
 
 ### Fase 0 — Fundação documental
@@ -71,7 +84,7 @@ Progresso registrado:
 
 ### Fase 2 — Fundação da aplicação
 
-**Status:** em andamento
+**Status:** concluída
 
 Objetivo:
 
@@ -79,21 +92,30 @@ Objetivo:
 - preparar a navegação e os módulos iniciais;
 - validar a estrutura da rotina comercial em operação.
 
-Progresso registrado:
+Entregas concluídas:
 
 - criação do Route Group `(crm)` para organização da área principal;
-- implementação de shell compartilhado para as rotas do CRM;
-- criação das rotas iniciais de Dashboard, Pedidos, Clientes, Follow-ups, Encomendas e Configurações;
-- implementação da navegação entre os módulos;
+- implementação do shell compartilhado das rotas do CRM;
+- criação das rotas de Dashboard, Pedidos, Clientes, Follow-ups, Encomendas e Configurações;
+- implementação da navegação principal;
 - identificação visual da rota ativa;
-- criação da estrutura inicial do Dashboard;
-- implementação de sidebar adaptativa, oculta por padrão e acessível por botão ou proximidade do cursor;
+- implementação da estrutura inicial do Dashboard;
+- implementação de sidebar adaptativa oculta por padrão;
+- abertura da sidebar por botão ou proximidade do cursor no desktop;
+- fechamento da sidebar pelo botão, área externa no mobile e tecla Escape;
+- gerenciamento básico de foco durante abertura e fechamento do menu;
 - implementação dos modos claro e escuro;
 - persistência local da preferência de tema;
 - adoção de tipografia híbrida para identidade e elementos operacionais;
-- validação da aplicação por lint e build de produção.
+- criação dos componentes reutilizáveis `PageHeader`, `Surface` e `ModulePlaceholder`;
+- redução da duplicação estrutural entre os módulos;
+- preparação responsiva inicial da interface;
+- validação manual da navegação, sidebar e alternância de tema;
+- validação técnica por ESLint e build de produção.
 
-A Fase 2 permanece em andamento. Os módulos existentes nesta etapa representam a fundação da interface e da navegação e não significam que as funcionalidades comerciais completas já estejam implementadas.
+A paleta neutra utilizada durante esta fase permanece provisória. A definição de uma identidade cromática definitiva será tratada posteriormente conforme a evolução visual do produto.
+
+A conclusão desta fase não inclui persistência, autenticação, regras completas de domínio, CRUD comercial ou integrações externas.
 ### Fase 3 — Persistência e domínio
 
 **Status:** futura
@@ -184,12 +206,14 @@ Essas evoluções não devem ser tratadas como compromissos do MVP atual.
 
 ## 6. Estado do documento
 
-A versão 0.4 registra o avanço da **Fase 2 — Fundação da aplicação**.
+A versão 0.5 registra a conclusão da **Fase 2 — Fundação da aplicação**.
 
-Esta revisão incorpora ao roadmap a base navegável dos módulos iniciais, o shell compartilhado da aplicação, a estrutura inicial do Dashboard, a sidebar adaptativa, a identificação de rota ativa e o suporte aos modos claro e escuro.
+A fase foi encerrada após a consolidação da estrutura navegável do CRM, dos módulos iniciais, do Dashboard, do shell compartilhado, da sidebar adaptativa, dos modos claro e escuro, da tipografia híbrida, dos componentes reutilizáveis de interface e dos comportamentos básicos de acessibilidade e teclado.
 
-A aplicação foi validada por lint e build de produção após essas alterações.
+A aplicação foi validada por ESLint, build de produção e testes manuais das rotas, navegação, sidebar, tecla Escape e persistência do tema.
 
-A Fase 2 permanece em andamento e esta atualização não antecipa persistência de dados, autenticação ou implementação completa do núcleo comercial.
+A paleta neutra atual permanece deliberadamente provisória.
+
+A **Fase 3 — Persistência e domínio** permanece como próxima etapa planejada e ainda não é considerada iniciada.
 
 Telegram, monitor local e demais integrações condicionadas permanecem fora do compromisso obrigatório desta etapa.
