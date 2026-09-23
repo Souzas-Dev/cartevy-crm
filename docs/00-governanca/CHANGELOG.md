@@ -35,6 +35,8 @@ A finalidade é manter rastreabilidade sobre documentos aprovados, consolidaçõ
 - manutenção do ARC-001 v0.1 no estado Em revisão.
 - aprovação do GOV-001 v0.4, com inclusão da regra para atualizações operacionais do índice e do changelog sem incremento obrigatório de versão.
 
+- aprovação do PRD-004 v0.2, com atualização do roadmap para registrar a Fase 1 — Estrutura técnica do projeto como em andamento e a fundação técnica inicial implementada e validada.
+
 ## 3. Estado do documento
 
 Este changelog representa a linha inicial de registro documental disponível para o projeto.

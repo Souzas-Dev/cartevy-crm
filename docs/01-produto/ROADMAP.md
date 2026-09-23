@@ -1,7 +1,7 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.1
+**Versão:** 0.2
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 22/09/2026
@@ -16,9 +16,13 @@ Ele não substitui os requisitos detalhados e deve ser usado como referência de
 
 ## 2. Estado atual
 
-O projeto se encontra em fase inicial de estruturação documental e de definição do produto.
+O projeto encontra-se na **Fase 1 — Estrutura técnica do projeto**, atualmente em andamento.
 
-A base funcional e operacional ainda não foi implementada. O que existe hoje é a consolidação do problema, do escopo e dos requisitos básicos do produto.
+A fundação documental está concluída e a base técnica inicial da aplicação foi implementada e validada, incluindo repositório Git, aplicação Next.js, TypeScript, ESLint, Tailwind CSS, PostCSS, App Router e build de produção.
+
+As funcionalidades comerciais do CRM ainda não foram implementadas.
+
+A **Fase 2 — Fundação da aplicação** permanece futura e deverá concentrar a evolução da interface, da navegação e dos módulos iniciais.
 
 ## 3. Fases do projeto
 
@@ -34,13 +38,26 @@ Objetivo:
 
 ### Fase 1 — Estrutura técnica do projeto
 
-**Status:** próxima
+**Status:** em andamento
 
 Objetivo:
 - iniciar a organização do repositório;
 - preparar a base técnica do projeto;
 - definir a estrutura inicial da aplicação;
 - estabelecer a base para o desenvolvimento futuro.
+
+
+Progresso registrado:
+
+- repositório Git inicializado e publicado no GitHub;
+- estrutura manual da aplicação Next.js criada;
+- Next.js, React e TypeScript configurados;
+- ESLint configurado e validado sem erros;
+- Tailwind CSS e PostCSS configurados;
+- estrutura inicial do App Router criada;
+- dependências instaladas e compatibilizadas;
+- build de produção executado com sucesso;
+- rota inicial da aplicação validada como conteúdo estático.
 
 ### Fase 2 — Fundação da aplicação
 
@@ -141,6 +158,10 @@ Essas evoluções não devem ser tratadas como compromissos do MVP atual.
 
 ## 6. Estado do documento
 
-Este documento foi consolidado com base na visão do produto, no escopo do MVP e no status atual do projeto.
+A versão 0.2 atualiza o roadmap para refletir o início efetivo da **Fase 1 — Estrutura técnica do projeto**.
+
+Esta revisão registra a implementação e validação da fundação técnica inicial da aplicação, sem antecipar a conclusão da Fase 1 e sem alterar o escopo funcional definido para o MVP.
+
+A **Fase 1** permanece em andamento e a **Fase 2 — Fundação da aplicação** permanece futura.
 
 Telegram e monitor local continuam condicionados e não devem ser tratados como requisitos obrigatórios da primeira entrega sem confirmação formal.
