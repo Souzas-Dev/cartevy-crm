@@ -1,7 +1,7 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.3
+**Versão:** 0.4
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 22/09/2026
@@ -18,12 +18,22 @@ Ele não substitui os requisitos detalhados e deve ser usado como referência de
 
 O projeto encontra-se na **Fase 2 — Fundação da aplicação**, atualmente em andamento.
 
-A **Fase 1 — Estrutura técnica do projeto** foi concluída após a implementação e validação da fundação técnica inicial, incluindo a estrutura Next.js, configuração das ferramentas de desenvolvimento e formalização da arquitetura vigente.
+A fundação técnica e arquitetural inicial está concluída e a aplicação já possui uma base navegável para os módulos previstos no CRM.
 
-A Fase 2 concentra a evolução da interface principal, da navegação e da estrutura inicial dos módulos do CRM.
+Nesta fase foram implementados o shell compartilhado da aplicação, a navegação entre os módulos iniciais, a estrutura visual do dashboard, a identificação da rota ativa, a sidebar adaptativa e os modos claro e escuro com persistência da preferência do usuário.
+
+As rotas iniciais disponíveis são:
+
+- Dashboard;
+- Pedidos;
+- Clientes;
+- Follow-ups;
+- Encomendas;
+- Configurações.
+
+A interface utiliza tipografia híbrida, mantendo Times New Roman em elementos de identidade e títulos e fonte sem serifa nos elementos operacionais.
 
 As funcionalidades comerciais completas, a persistência de dados e a autenticação ainda não foram implementadas e permanecem previstas para as fases correspondentes do roadmap.
-
 ## 3. Fases do projeto
 
 ### Fase 0 — Fundação documental
@@ -64,10 +74,26 @@ Progresso registrado:
 **Status:** em andamento
 
 Objetivo:
+
 - criar a base da interface e da aplicação principal;
 - preparar a navegação e os módulos iniciais;
 - validar a estrutura da rotina comercial em operação.
 
+Progresso registrado:
+
+- criação do Route Group `(crm)` para organização da área principal;
+- implementação de shell compartilhado para as rotas do CRM;
+- criação das rotas iniciais de Dashboard, Pedidos, Clientes, Follow-ups, Encomendas e Configurações;
+- implementação da navegação entre os módulos;
+- identificação visual da rota ativa;
+- criação da estrutura inicial do Dashboard;
+- implementação de sidebar adaptativa, oculta por padrão e acessível por botão ou proximidade do cursor;
+- implementação dos modos claro e escuro;
+- persistência local da preferência de tema;
+- adoção de tipografia híbrida para identidade e elementos operacionais;
+- validação da aplicação por lint e build de produção.
+
+A Fase 2 permanece em andamento. Os módulos existentes nesta etapa representam a fundação da interface e da navegação e não significam que as funcionalidades comerciais completas já estejam implementadas.
 ### Fase 3 — Persistência e domínio
 
 **Status:** futura
@@ -158,10 +184,12 @@ Essas evoluções não devem ser tratadas como compromissos do MVP atual.
 
 ## 6. Estado do documento
 
-A versão 0.3 registra a conclusão da **Fase 1 — Estrutura técnica do projeto** e o início da **Fase 2 — Fundação da aplicação**.
+A versão 0.4 registra o avanço da **Fase 2 — Fundação da aplicação**.
 
-A transição ocorre após a implementação e validação da fundação técnica inicial, a formalização da arquitetura vigente em `ARC-001 — Arquitetura da Aplicação` e a aprovação de `ADR-001 — Fundação Técnica Inicial da Aplicação`.
+Esta revisão incorpora ao roadmap a base navegável dos módulos iniciais, o shell compartilhado da aplicação, a estrutura inicial do Dashboard, a sidebar adaptativa, a identificação de rota ativa e o suporte aos modos claro e escuro.
 
-A Fase 2 passa a concentrar a construção da interface principal, da navegação e da estrutura inicial dos módulos do CRM, sem antecipar persistência, autenticação ou funcionalidades comerciais completas previstas para fases posteriores.
+A aplicação foi validada por lint e build de produção após essas alterações.
+
+A Fase 2 permanece em andamento e esta atualização não antecipa persistência de dados, autenticação ou implementação completa do núcleo comercial.
 
 Telegram, monitor local e demais integrações condicionadas permanecem fora do compromisso obrigatório desta etapa.
