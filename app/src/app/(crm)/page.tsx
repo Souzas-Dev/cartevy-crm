@@ -9,9 +9,13 @@ export default function DashboardPage() {
   return (
     <section className="space-y-8">
       <div>
-        <p className="text-sm text-neutral-500">Visão geral</p>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          Visão geral
+        </p>
+
         <h1 className="mt-1 text-3xl font-semibold">Dashboard</h1>
-        <p className="mt-2 max-w-2xl text-neutral-600">
+
+        <p className="mt-2 max-w-2xl text-neutral-600 dark:text-neutral-300">
           Acompanhamento da rotina comercial do CRM de Vendas.
         </p>
       </div>
@@ -20,17 +24,23 @@ export default function DashboardPage() {
         {indicators.map((indicator) => (
           <article
             key={indicator.label}
-            className="rounded-lg border border-neutral-200 bg-white p-5"
+            className="rounded-lg border border-neutral-200 bg-white p-5 transition-colors dark:border-neutral-800 dark:bg-neutral-900"
           >
-            <p className="text-sm text-neutral-500">{indicator.label}</p>
-            <p className="mt-3 text-3xl font-semibold">{indicator.value}</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              {indicator.label}
+            </p>
+
+            <p className="mt-3 text-3xl font-semibold">
+              {indicator.value}
+            </p>
           </article>
         ))}
       </div>
 
-      <section className="rounded-lg border border-neutral-200 bg-white p-6">
+      <section className="rounded-lg border border-neutral-200 bg-white p-6 transition-colors dark:border-neutral-800 dark:bg-neutral-900">
         <h2 className="text-xl font-semibold">Atividade comercial</h2>
-        <p className="mt-2 text-neutral-600">
+
+        <p className="mt-2 text-neutral-600 dark:text-neutral-300">
           Os indicadores serão alimentados quando a persistência e o domínio comercial forem implementados.
         </p>
       </section>

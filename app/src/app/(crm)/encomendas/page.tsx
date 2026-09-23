@@ -2,15 +2,15 @@ export default function EncomendasPage() {
   return (
     <section className="space-y-6">
       <div>
-        <p className="text-sm text-neutral-500">Operação comercial</p>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400">Operação comercial</p>
         <h1 className="mt-1 text-3xl font-semibold">Encomendas</h1>
-        <p className="mt-2 text-neutral-600">
+        <p className="mt-2 text-neutral-600 dark:text-neutral-300">
           Acompanhamento das encomendas relacionadas à rotina comercial.
         </p>
       </div>
 
-      <div className="rounded-lg border border-neutral-200 bg-white p-6">
-        <p className="text-neutral-600">
+      <div className="rounded-lg border border-neutral-200 bg-white p-6 transition-colors dark:border-neutral-800 dark:bg-neutral-900">
+        <p className="text-neutral-600 dark:text-neutral-300">
           O fluxo de acompanhamento será implementado junto ao núcleo comercial do CRM.
         </p>
       </div>
