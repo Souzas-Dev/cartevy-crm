@@ -14,7 +14,7 @@ export default function DashboardPage() {
       <PageHeader
         eyebrow="Visão geral"
         title="Dashboard"
-        description="Acompanhamento da rotina comercial do CRM de Vendas."
+        description="Acompanhamento da rotina comercial do Cartevy CRM."
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

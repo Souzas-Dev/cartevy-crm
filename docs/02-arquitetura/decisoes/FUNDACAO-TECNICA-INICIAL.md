@@ -10,7 +10,7 @@
 
 ## 1. Contexto
 
-O CRM de Vendas necessita de uma base técnica simples, sustentável e adequada ao estágio inicial do produto.
+O Cartevy CRM necessita de uma base técnica simples, sustentável e adequada ao estágio inicial do produto.
 
 A arquitetura registrada em `ARC-001 — Arquitetura da Aplicação` prevê uma aplicação web orientada ao MVP, com possibilidade de concentrar inicialmente frontend e backend em uma mesma base, evitando complexidade arquitetural prematura.
 

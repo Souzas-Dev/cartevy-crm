@@ -10,7 +10,7 @@
 
 ## 1. Finalidade
 
-Este documento registra as mudanças relevantes na documentação controlada do projeto CRM de Vendas.
+Este documento registra as mudanças relevantes na documentação controlada do projeto Cartevy CRM.
 
 A finalidade é manter rastreabilidade sobre documentos aprovados, consolidações e reorganizações sem reconstruir histórico fictício.
 
@@ -45,6 +45,8 @@ A finalidade é manter rastreabilidade sobre documentos aprovados, consolidaçõ
 - aprovação do PRD-004 v0.4, com registro do avanço da Fase 2 — Fundação da aplicação, incluindo shell navegável, módulos iniciais, dashboard estrutural, sidebar adaptativa, navegação ativa e modos claro e escuro.
 
 - aprovação do PRD-004 v0.5 e conclusão da Fase 2 — Fundação da aplicação, com consolidação do shell navegável, sidebar adaptativa, temas claro e escuro, componentes reutilizáveis, responsividade inicial e acessibilidade básica.
+
+- aprovação do PRD-004 v0.6 e adoção oficial da nomenclatura **Cartevy CRM**, com marca curta **Cartevy**, assinatura **by Souzas Dev** e slogan **“Sua carteira comercial em movimento”**, sem alteração do escopo funcional do produto.
 
 ## 3. Estado do documento
 

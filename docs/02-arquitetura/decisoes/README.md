@@ -1,6 +1,6 @@
 # Decisões de Arquitetura
 
-Este diretório é destinado ao registro de decisões arquiteturais relevantes do projeto CRM de Vendas.
+Este diretório é destinado ao registro de decisões arquiteturais relevantes do projeto Cartevy CRM.
 
 Ele funciona como orientação para os futuros ADRs e **não é, por si só, um ADR nem um documento controlado**.
 

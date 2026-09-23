@@ -10,7 +10,7 @@
 
 ## 1. Finalidade
 
-Este documento registra a visão arquitetural atualmente sustentada pelo projeto CRM de Vendas.
+Este documento registra a visão arquitetural atualmente sustentada pelo projeto Cartevy CRM.
 
 Ele não pretende estabelecer uma arquitetura definitiva para todos os cenários futuros, mas sim preservar as direções conhecidas e aceitáveis para a primeira fase do produto.
 

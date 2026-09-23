@@ -10,7 +10,7 @@
 
 ## 1. Finalidade
 
-Este documento consolida os requisitos do CRM de Vendas e estabelece a base para a implementação e validação do MVP.
+Este documento consolida os requisitos do Cartevy CRM e estabelece a base para a implementação e validação do MVP.
 
 Ele descreve requisitos funcionais, requisitos não funcionais, regras de negócio e condições que dependem de confirmação antes da primeira entrega.
 

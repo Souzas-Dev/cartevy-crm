@@ -10,7 +10,7 @@
 
 ## 1. Objetivo
 
-Definir o padrão utilizado na documentação do projeto CRM de Vendas.
+Definir o padrão utilizado na documentação do projeto Cartevy CRM.
 
 Este documento estabelece regras mínimas de organização, identificação, versionamento e manutenção dos documentos do projeto.
 

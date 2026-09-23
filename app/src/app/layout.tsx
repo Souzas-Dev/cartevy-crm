@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CRM de Vendas",
-  description: "Aplicação de apoio à rotina comercial."
+  title: "Cartevy CRM",
+  description: "Sua carteira comercial em movimento."
 };
 
 const themeScript = `

@@ -10,7 +10,7 @@
 
 ## 1. Finalidade
 
-Este documento apresenta a visão de produto do CRM de Vendas.
+Este documento apresenta a visão de produto do Cartevy CRM.
 
 Seu objetivo é registrar, de forma consolidada, o problema que originou o projeto, o público inicial, a proposta de valor, os limites do produto e sua direção de evolução.
 
@@ -64,7 +64,7 @@ A utilização por outras empresas ou equipes representa uma possibilidade futur
 
 ## 5. Proposta de valor
 
-O CRM de Vendas deverá oferecer uma forma simples de transformar informações atualmente dispersas em uma visão comercial organizada e consultável.
+O Cartevy CRM deverá oferecer uma forma simples de transformar informações atualmente dispersas em uma visão comercial organizada e consultável.
 
 A proposta central é:
 
@@ -127,7 +127,7 @@ A primeira versão deverá permanecer simples, mas decisões estruturais não de
 
 ## 7. Limites do produto
 
-O CRM de Vendas não tem como objetivo substituir sistemas especializados em outras áreas da operação.
+O Cartevy CRM não tem como objetivo substituir sistemas especializados em outras áreas da operação.
 
 Não fazem parte da responsabilidade principal do produto:
 
@@ -238,6 +238,6 @@ Este documento não deve substituir especificações técnicas ou requisitos det
 
 A versão 0.1 representa a consolidação inicial da visão do produto.
 
-Este documento está aprovado como referência oficial para a visão, propósito, limites e direção de evolução do CRM de Vendas.
+Este documento está aprovado como referência oficial para a visão, propósito, limites e direção de evolução do Cartevy CRM.
 
 Alterações futuras deverão preservar a rastreabilidade documental e atualizar a versão quando aplicável.

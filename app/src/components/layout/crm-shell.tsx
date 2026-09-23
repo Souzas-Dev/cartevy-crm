@@ -127,11 +127,11 @@ export function CrmShell({ children }: CrmShellProps) {
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <strong className="font-brand text-xl font-semibold">
-              CRM de Vendas
+              Cartevy CRM
             </strong>
 
             <span className="text-sm text-neutral-500 dark:text-neutral-400">
-              Operação comercial
+              by Souzas Dev
             </span>
           </div>
 

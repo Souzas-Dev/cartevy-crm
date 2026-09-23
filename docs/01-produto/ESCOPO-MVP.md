@@ -10,7 +10,7 @@
 
 ## 1. Finalidade
 
-Este documento define o escopo da primeira versão operacional do CRM de Vendas.
+Este documento define o escopo da primeira versão operacional do Cartevy CRM.
 
 Seu objetivo é estabelecer:
 
@@ -24,7 +24,7 @@ Este documento define limites de produto e não substitui requisitos detalhados,
 
 ## 2. Definição do MVP
 
-O MVP corresponde à primeira versão operacional do CRM de Vendas destinada ao uso real na rotina comercial.
+O MVP corresponde à primeira versão operacional do Cartevy CRM destinada ao uso real na rotina comercial.
 
 Essa versão deverá concentrar-se no núcleo necessário para organizar e acompanhar:
 

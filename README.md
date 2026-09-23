@@ -1,8 +1,11 @@
-# CRM de Vendas
+# Cartevy CRM
 
+**by Souzas Dev**
+
+> Sua carteira comercial em movimento.
 ## Visão geral
 
-O CRM de Vendas é um projeto documental e funcional em fase inicial, voltado ao acompanhamento comercial de clientes, pedidos, vendas, follow-ups e encomendas.
+O Cartevy CRM é um projeto documental e funcional em fase inicial, voltado ao acompanhamento comercial de clientes, pedidos, vendas, follow-ups e encomendas.
 
 A proposta principal é centralizar informações que hoje permanecem dispersas e facilitar a rotina de um vendedor sem substituir sistemas especializados em faturamento, estoque, logística ou gestão financeira.
 

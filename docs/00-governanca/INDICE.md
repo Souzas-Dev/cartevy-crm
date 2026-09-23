@@ -10,7 +10,7 @@
 
 ## 1. Finalidade
 
-Este documento atua como mapa oficial da documentação do projeto CRM de Vendas.
+Este documento atua como mapa oficial da documentação do projeto Cartevy CRM.
 
 Sua finalidade é facilitar a localização de documentos controlados e manter a estrutura documental alinhada ao estado real do projeto.
 
@@ -56,7 +56,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **PRD-004 — Roadmap do Produto**
   Arquivo: [../01-produto/ROADMAP.md](../01-produto/ROADMAP.md)
-  Versão: 0.5
+  Versão: 0.6
   Status: Aprovado
   Finalidade: organizar as fases de evolução do projeto e sua progressão.
 

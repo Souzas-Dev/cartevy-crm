@@ -1,16 +1,16 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.5
+**Versão:** 0.6
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 22/09/2026
+**Última atualização:** 23/09/2026
 
 ---
 
 ## 1. Finalidade
 
-Este documento organiza a evolução do CRM de Vendas em fases coerentes com o estágio documental e com o escopo do MVP definido em PRD-001 e PRD-002.
+Este documento organiza a evolução do Cartevy CRM em fases coerentes com o estágio documental e com o escopo do MVP definido em PRD-001 e PRD-002.
 
 Ele não substitui os requisitos detalhados e deve ser usado como referência de progressão do projeto, sem prometer entregas que ainda não tenham sido aprovadas.
 
@@ -206,14 +206,16 @@ Essas evoluções não devem ser tratadas como compromissos do MVP atual.
 
 ## 6. Estado do documento
 
-A versão 0.5 registra a conclusão da **Fase 2 — Fundação da aplicação**.
+A versão 0.6 registra a adoção oficial do nome **Cartevy CRM** para o produto anteriormente identificado por uma nomenclatura genérica de projeto.
 
-A fase foi encerrada após a consolidação da estrutura navegável do CRM, dos módulos iniciais, do Dashboard, do shell compartilhado, da sidebar adaptativa, dos modos claro e escuro, da tipografia híbrida, dos componentes reutilizáveis de interface e dos comportamentos básicos de acessibilidade e teclado.
+A marca curta do produto passa a ser **Cartevy**, com assinatura institucional **by Souzas Dev** e posicionamento inicial expresso pelo slogan **“Sua carteira comercial em movimento”**.
 
-A aplicação foi validada por ESLint, build de produção e testes manuais das rotas, navegação, sidebar, tecla Escape e persistência do tema.
+A mudança é exclusivamente de nomenclatura e identidade do produto e não altera o escopo funcional definido no roadmap.
 
-A paleta neutra atual permanece deliberadamente provisória.
+A **Fase 2 — Fundação da aplicação** permanece concluída.
 
 A **Fase 3 — Persistência e domínio** permanece como próxima etapa planejada e ainda não é considerada iniciada.
 
-Telegram, monitor local e demais integrações condicionadas permanecem fora do compromisso obrigatório desta etapa.
+A paleta visual atual continua provisória e poderá ser refinada posteriormente sem alterar a arquitetura funcional do produto.
+
+Telegram, monitor local, integração logística e demais integrações futuras ou condicionadas permanecem fora do compromisso obrigatório das etapas já concluídas.
