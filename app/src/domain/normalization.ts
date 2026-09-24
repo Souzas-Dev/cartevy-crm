@@ -2,7 +2,7 @@ export function normalizeDocument(value: string): string {
   return value.replace(/\D/g, "");
 }
 
-export function normalizePhone(value: string): string {
+export function normalizeWhatsapp(value: string): string {
   return value.replace(/\D/g, "");
 }
 

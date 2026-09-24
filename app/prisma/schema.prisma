@@ -12,14 +12,6 @@ enum AppUserStatus {
   INACTIVE
 }
 
-enum OrderOrigin {
-  MANUAL
-  PDF_IMPORT
-  TELEGRAM
-  LOCAL_MONITOR
-  INTEGRATION
-}
-
 enum FollowUpStatus {
   PENDING
   COMPLETED
@@ -42,6 +34,7 @@ model Organization {
   users      AppUser[]
   customers  Customer[]
   orders     Order[]
+  orderItems OrderItem[]
   followUps  FollowUp[]
   backorders Backorder[]
 
@@ -75,11 +68,11 @@ model Customer {
   id                String   @id @default(uuid()) @db.Uuid
   organizationId    String   @map("organization_id") @db.Uuid
   responsibleUserId String?  @map("responsible_user_id") @db.Uuid
-  internalCode      String?  @map("internal_code") @db.VarChar(80)
+  internalCode      String   @map("internal_code") @db.VarChar(80)
   name              String   @db.VarChar(200)
   document          String?  @db.VarChar(14)
-  phone             String?  @db.VarChar(15)
-  notes             String?  @db.Text
+  whatsapp          String?  @db.VarChar(15)
+  observations      String?  @db.Text
   createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
 
@@ -92,7 +85,7 @@ model Customer {
   @@unique([id, organizationId])
   @@unique([organizationId, internalCode])
   @@unique([organizationId, document])
-  @@index([organizationId, phone])
+  @@index([organizationId, whatsapp])
   @@index([organizationId, name])
   @@index([organizationId, responsibleUserId])
   @@index([responsibleUserId, organizationId])
@@ -100,22 +93,25 @@ model Customer {
 }
 
 model Order {
-  id                String      @id @default(uuid()) @db.Uuid
-  organizationId    String      @map("organization_id") @db.Uuid
-  customerId        String      @map("customer_id") @db.Uuid
-  responsibleUserId String?     @map("responsible_user_id") @db.Uuid
-  number            String      @db.VarChar(100)
-  orderedAt         DateTime    @map("ordered_at") @db.Date
-  total             Decimal     @db.Decimal(14, 2)
-  origin            OrderOrigin @default(MANUAL)
-  notes             String?     @db.Text
-  createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamptz(3)
+  id                String   @id @default(uuid()) @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  customerId        String?  @map("customer_id") @db.Uuid
+  customerName      String   @map("customer_name") @db.VarChar(200)
+  responsibleUserId String?  @map("responsible_user_id") @db.Uuid
+  number            String   @db.VarChar(100)
+  importedAt        DateTime @default(now()) @map("imported_at") @db.Timestamptz(3)
+  productsTotal     Decimal  @map("products_total") @db.Decimal(14, 2)
+  discountTotal     Decimal  @default(0) @map("discount_total") @db.Decimal(14, 2)
+  freightTotal      Decimal  @default(0) @map("freight_total") @db.Decimal(14, 2)
+  grandTotal        Decimal  @map("total") @db.Decimal(14, 2)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
 
   organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
-  customer        Customer     @relation(fields: [customerId, organizationId], references: [id, organizationId], onDelete: Restrict)
+  customer        Customer?    @relation(fields: [customerId, organizationId], references: [id, organizationId], onDelete: Restrict)
   responsibleUser AppUser?     @relation("OrderResponsibleUser", fields: [responsibleUserId, organizationId], references: [id, organizationId], onDelete: Restrict)
 
+  items      OrderItem[]
   followUps  FollowUp[]
   backorders Backorder[]
 
@@ -125,8 +121,25 @@ model Order {
   @@index([customerId, organizationId])
   @@index([organizationId, responsibleUserId])
   @@index([responsibleUserId, organizationId])
-  @@index([organizationId, orderedAt])
+  @@index([organizationId, importedAt])
   @@map("orders")
+}
+
+model OrderItem {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  orderId        String   @map("order_id") @db.Uuid
+  name           String   @db.VarChar(500)
+  quantity       Decimal  @db.Decimal(14, 4)
+  unit           String   @db.VarChar(40)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  order        Order        @relation(fields: [orderId, organizationId], references: [id, organizationId], onDelete: Restrict)
+
+  @@index([organizationId, orderId])
+  @@index([orderId, organizationId])
+  @@map("order_items")
 }
 
 model FollowUp {
@@ -144,7 +157,7 @@ model FollowUp {
   updatedAt         DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
 
   organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
-  customer        Customer     @relation(fields: [customerId, organizationId], references: [id, organizationId], onDelete: Restrict)
+  customer        Customer?    @relation(fields: [customerId, organizationId], references: [id, organizationId], onDelete: Restrict)
   order           Order?       @relation(fields: [orderId, organizationId], references: [id, organizationId], onDelete: Restrict)
   responsibleUser AppUser?     @relation("FollowUpResponsibleUser", fields: [responsibleUserId, organizationId], references: [id, organizationId], onDelete: Restrict)
 

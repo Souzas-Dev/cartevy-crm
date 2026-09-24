@@ -6,10 +6,12 @@ import {
   assertSameOrganization,
 } from "../invariants";
 import {
-  customerInputSchema,
+  confirmedOrderInputSchema,
+  customerContactUpdateSchema,
+  customerImportInputSchema,
   followUpInputSchema,
   moneySchema,
-  orderInputSchema,
+  orderItemInputSchema,
 } from "../schemas";
 
 const organizationId =
@@ -22,23 +24,55 @@ const customerId =
   "33333333-3333-4333-8333-333333333333";
 
 describe("customer domain", () => {
-  it("normalizes CPF and phone before persistence", () => {
-    const result = customerInputSchema.parse({
+  it("accepts a customer with only the required name", () => {
+    const result = customerImportInputSchema.parse({
       organizationId,
-      name: "Cliente Teste",
-      document: "123.456.789-01",
-      phone: "(67) 99999-9999",
+      name: "Rosa Casagrande",
     });
 
-    expect(result.document).toBe("12345678901");
-    expect(result.phone).toBe("67999999999");
+    expect(result.name).toBe("Rosa Casagrande");
+    expect(result.document).toBeUndefined();
+    expect(result.whatsapp).toBeUndefined();
+  });
+
+  it("normalizes optional document and WhatsApp", () => {
+    const result = customerImportInputSchema.parse({
+      organizationId,
+      internalCode: " 1492 ",
+      name: "ENGEPAR",
+      document: "01.618.204/0001-53",
+      whatsapp: "(67) 99336-0660",
+    });
+
+    expect(result.internalCode).toBe("1492");
+    expect(result.document).toBe("01618204000153");
+    expect(result.whatsapp).toBe("67993360660");
   });
 
   it("rejects invalid document length", () => {
-    const result = customerInputSchema.safeParse({
+    const result = customerImportInputSchema.safeParse({
       organizationId,
       name: "Cliente Teste",
       document: "123",
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("allows manual updates only for WhatsApp and observations", () => {
+    const result = customerContactUpdateSchema.parse({
+      whatsapp: "(67) 99999-9999",
+      observations:
+        "Falar com Fulano pelo contato comercial.",
+    });
+
+    expect(result.whatsapp).toBe("67999999999");
+    expect(result.observations).toContain("Fulano");
+  });
+
+  it("rejects other customer fields in manual updates", () => {
+    const result = customerContactUpdateSchema.safeParse({
+      name: "Nome alterado indevidamente",
     });
 
     expect(result.success).toBe(false);
@@ -47,25 +81,84 @@ describe("customer domain", () => {
 
 describe("order domain", () => {
   it("accepts canonical monetary values", () => {
-    expect(moneySchema.parse("1500.25")).toBe("1500.25");
+    expect(moneySchema.parse("212.80")).toBe("212.80");
   });
 
   it("rejects monetary values with more than two decimals", () => {
     expect(
-      moneySchema.safeParse("1500.259").success,
+      moneySchema.safeParse("212.805").success,
     ).toBe(false);
   });
 
-  it("defaults order origin to MANUAL", () => {
-    const result = orderInputSchema.parse({
-      organizationId,
-      customerId,
-      number: "PED-001",
-      orderedAt: "2026-09-23",
-      total: "1500.25",
+  it("supports decimal quantities and open unit names", () => {
+    const result = orderItemInputSchema.parse({
+      name: "Produto de teste",
+      quantity: "1.5",
+      unit: "PACOTE",
     });
 
-    expect(result.origin).toBe("MANUAL");
+    expect(result.quantity).toBe("1.5");
+    expect(result.unit).toBe("PACOTE");
+  });
+
+  it("defaults absent discount and freight to zero", () => {
+    const result = confirmedOrderInputSchema.parse({
+      organizationId,
+      customerId,
+      number: "80884",
+      customerName: "ENGEPAR",
+      productsTotal: "212.80",
+      grandTotal: "212.80",
+      items: [
+        {
+          name: "ALCOOL 70 1 LITRO",
+          quantity: "1",
+          unit: "UN",
+        },
+      ],
+    });
+
+    expect(result.discountTotal).toBe("0");
+    expect(result.freightTotal).toBe("0");
+  });
+
+  it("accepts the consolidated totals required by the CRM", () => {
+    const result = confirmedOrderInputSchema.parse({
+      organizationId,
+      customerId,
+      number: "75081",
+      customerName: "Rosa Casagrande",
+      productsTotal: "680.90",
+      discountTotal: "37.80",
+      freightTotal: "5.00",
+      grandTotal: "648.10",
+      items: [
+        {
+          name: "LENCOL PAPEL 70CMX50M AMARELO PLUMAX",
+          quantity: "20",
+          unit: "UN",
+        },
+      ],
+    });
+
+    expect(result.productsTotal).toBe("680.90");
+    expect(result.discountTotal).toBe("37.80");
+    expect(result.freightTotal).toBe("5.00");
+    expect(result.grandTotal).toBe("648.10");
+  });
+
+  it("requires at least one order item", () => {
+    const result = confirmedOrderInputSchema.safeParse({
+      organizationId,
+      customerId,
+      number: "SEM-ITEM",
+      customerName: "Cliente Teste",
+      productsTotal: "0",
+      grandTotal: "0",
+      items: [],
+    });
+
+    expect(result.success).toBe(false);
   });
 });
 
