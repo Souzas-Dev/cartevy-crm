@@ -56,7 +56,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **PRD-004 — Roadmap do Produto**
   Arquivo: [../01-produto/ROADMAP.md](../01-produto/ROADMAP.md)
-  Versão: 0.9
+  Versão: 0.10
   Status: Aprovado
   Finalidade: organizar as fases de evolução do projeto e sua progressão.
 
@@ -64,7 +64,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **ARC-001 — Arquitetura da Aplicação**
   Arquivo: [../02-arquitetura/ARQUITETURA.md](../02-arquitetura/ARQUITETURA.md)
-  Versão: 0.5
+  Versão: 0.6
   Status: Aprovado
   Finalidade: registrar as decisões arquiteturais conhecidas e sustentadas pelo projeto.
 
@@ -105,4 +105,4 @@ Esses itens permanecem previstos na estrutura documental e não devem ser tratad
 
 Este índice reflete a documentação controlada vigente do Cartevy CRM.
 
-A versão 0.3 permanece vigente. Em 24/09/2026, o índice foi sincronizado operacionalmente para refletir PRD-004 v0.9, ARC-001 v0.5 e ADR-003 v0.1 no fechamento documental da Fase 4 — Autenticação.
+A versão 0.3 permanece vigente. Em 24/09/2026, o índice foi sincronizado operacionalmente para refletir PRD-004 v0.10, ARC-001 v0.6 e ADR-003 v0.1 no início documentado da Fase 5 — Núcleo comercial.

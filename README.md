@@ -12,7 +12,7 @@ A proposta principal é centralizar informações da rotina comercial, preservar
 
 ## Estado atual
 
-As **Fases 0, 1, 2, 3 e 4 estão concluídas**. A próxima etapa é a **Fase 5 — Núcleo comercial**.
+As **Fases 0, 1, 2, 3 e 4 estão concluídas**. A **Fase 5 — Núcleo comercial está em andamento**, iniciada pelo planejamento técnico e pela execução incremental dos módulos comerciais.
 
 Já estão concluídas:
 
@@ -202,7 +202,7 @@ A branch `main` é protegida. O fluxo esperado é:
 | Fundação da aplicação | Concluída |
 | Persistência e domínio | Concluída |
 | Autenticação | Concluída |
-| Núcleo comercial | Próxima |
+| Núcleo comercial | Em andamento |
 | Importação de PDFs | Planejada |
 | Monitor local / extração | Planejado |
 | Staging temporário | Planejado |

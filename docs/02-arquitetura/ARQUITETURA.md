@@ -1,7 +1,7 @@
 # Arquitetura da Aplicação
 
 **Documento:** ARC-001 — Arquitetura da Aplicação
-**Versão:** 0.5
+**Versão:** 0.6
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 24/09/2026
@@ -355,7 +355,7 @@ Após a conclusão da Fase 4, permanecem pendentes de definição ou implementa�
 - integrações condicionadas;
 - deploy/estabilização de produção.
 
-A próxima fase é a Fase 5 — Núcleo comercial.
+A Fase 5 — Núcleo comercial está em andamento.
 
 ## 8. Princípios arquiteturais
 
@@ -373,7 +373,7 @@ A próxima fase é a Fase 5 — Núcleo comercial.
 
 ## 9. Estado do documento
 
-A versão 0.5 representa a arquitetura ao final da Fase 4 — Autenticação, concluída.
+A versão 0.6 representa a arquitetura no início da Fase 5 — Núcleo comercial, preservando como concluída a base estabelecida até a Fase 4 — Autenticação.
 
 PostgreSQL gerenciado pelo Supabase e Prisma 7 permanecem como fundação de persistência conforme ADR-002.
 
@@ -401,6 +401,6 @@ A autorização específica das operações comerciais deverá ser aplicada na F
 
 Policies RLS baseadas diretamente na sessão do Cartevy, administração completa de usuários, hospedagem e infraestrutura definitiva permanecem pendentes de decisões ou implementação próprias.
 
-A próxima fase é a Fase 5 — Núcleo comercial.
+A Fase 5 — Núcleo comercial está em andamento.
 
 O fluxo de ingestão com monitor Python, staging temporário e Telegram permanece como direção aprovada para fases futuras.
