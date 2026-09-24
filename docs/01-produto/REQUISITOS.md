@@ -1,10 +1,10 @@
 # Requisitos do Produto
 
 **Documento:** PRD-003 — Requisitos do Produto
-**Versão:** 0.2
+**Versão:** 0.3
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 22/09/2026
+**Última atualização:** 23/09/2026
 
 ---
 
@@ -23,7 +23,7 @@ A estrutura e os limites deste documento são coerentes com as visões registrad
 - o texto deve manter foco em comportamento e resultado esperado;
 - detalhes de implementação não devem ser transformados em requisitos de produto sem necessidade;
 - requisitos dependentes de decisão futura devem ser claramente identificados como condicionados;
-- a utilização de Telegram e do monitor local deve permanecer condicionada até confirmação formal;
+- monitor local e Telegram compõem o fluxo de ingestão aprovado, embora sua implementação permaneça em fases posteriores;
 - os identificadores RNF-011, RNF-012 e RNF-013 permanecem sem uso na documentação vigente e não deverão ser reutilizados, preservando a estabilidade dos identificadores posteriores.
 
 ## 3. Requisitos funcionais
@@ -62,20 +62,25 @@ O sistema deve disponibilizar uma visualização específica para cada pedido co
 
 ### RF-009 — Cadastro de clientes
 
-O sistema deve permitir registrar clientes com dados essenciais para identificação e acompanhamento comercial.
+O sistema deve manter cliente somente quando existir código interno formal da operação de origem.
 
 ### RF-010 — Reuso de cliente existente
 
-O sistema deve verificar a existência de cliente compatível antes de criar um novo registro, considerando dados como código interno, CPF/CNPJ ou telefone.
+O código interno deve ser utilizado como identificador primário para reutilização de cliente dentro da organização.
+
+CPF/CNPJ poderá ser utilizado como verificação de consistência.
+
+Nome não deverá ser utilizado como chave de identidade.
 
 ### RF-011 — Consulta de clientes
 
-O sistema deve permitir consultar clientes por nome, código interno, CPF/CNPJ ou telefone.
+O sistema deve permitir consultar clientes por nome, código interno, CPF/CNPJ ou WhatsApp.
 
 ### RF-012 — Histórico comercial do cliente
 
-O sistema deve apresentar o histórico de pedidos, follow-ups e encomendas relacionados ao cliente.
+O histórico deve refletir somente pedidos explicitamente vinculados ao cliente formal.
 
+Vendas sem cadastro não deverão ser atribuídas automaticamente por semelhança de nome.
 ### RF-013 — Cadastro de follow-up
 
 O sistema deve permitir registrar ações comerciais futuras vinculadas a clientes e pedidos.
@@ -100,22 +105,36 @@ O sistema deve permitir buscar e filtrar registros por período e por dados rele
 
 O sistema deve permitir registrar observações comerciais em registros relevantes, sem substituir campos estruturados.
 
-### RF-019 — Importação de pedidos por PDF
+### RF-019 — Dados estruturados do pedido importado
 
-O sistema deve permitir importar dados de pedidos a partir de arquivos PDF, quando disponíveis no documento, incluindo número do pedido, código interno do cliente, nome, CPF/CNPJ, telefone, data do pedido e valor total.
+A ingestão deverá preparar, quando disponíveis:
 
-### RF-020 — Validação da importação
+- número do pedido;
+- nome apresentado;
+- código interno;
+- CPF/CNPJ;
+- WhatsApp;
+- total de produtos;
+- desconto total;
+- frete;
+- total geral;
+- itens com descrição, quantidade e unidade.
 
-O sistema deve validar os dados extraídos antes de confirmar o registro de um pedido importado, incluindo verificação de campos obrigatórios, inconsistências e duplicidade.
+### RF-020 — Validação antes da persistência oficial
 
-### RF-021 — Não persistência do PDF
+Dados extraídos de PDF ou automação externa deverão permanecer temporários até a conclusão da validação.
 
-O sistema deve tratar o PDF como fonte de processamento e persistir prioritariamente os dados estruturados extraídos, não sendo obrigatório armazenar o arquivo permanentemente.
+Somente pedidos confirmados deverão compor o histórico oficial.
 
-### RF-022 — Origem do registro
+### RF-021 — Não persistência obrigatória do PDF
 
-O sistema deve registrar a origem do dado principal quando houver diferenciação entre cadastro manual e importação automatizada.
+O PDF deverá ser tratado como fonte de extração e não precisa ser armazenado permanentemente pelo CRM.
 
+### RF-022 — Venda sem cadastro formal
+
+Pedido sem código interno deverá ser persistido como venda sem criar cliente.
+
+A venda deverá participar dos cálculos comerciais por período, mas não deverá gerar histórico de cliente ou follow-up.
 ### RF-023 — Preparação para múltiplos usuários
 
 A estrutura do sistema deve permitir, em evolução futura, associação de registros a diferentes usuários e responsáveis pela operação.
@@ -134,11 +153,42 @@ O sistema deve manter a sessão do usuário autenticado de forma adequada durant
 
 ### RF-027 — Atualização de clientes
 
-O sistema deve permitir atualizar os dados cadastrais e comerciais de clientes existentes sem perder o histórico relacionado.
+O sistema deve permitir atualização manual apenas dos dados comerciais autorizados do cliente.
 
+No fluxo normal do CRM, poderão ser alterados manualmente:
+
+- WhatsApp;
+- observações comerciais.
+
+Nome, código interno e CPF/CNPJ provenientes da origem não deverão ser alterados manualmente.
+
+Dados recebidos posteriormente pela origem poderão preencher campos estruturados ainda vazios, mas não deverão substituir silenciosamente valores existentes.
 ### RF-028 — Acompanhamento de encomendas
 
 O sistema deve permitir atualizar o status, registrar o andamento e encerrar encomendas sem perder o histórico relacionado.
+
+### RF-029 — Monitor local de preparação
+
+O fluxo de ingestão deve prever um processo Python local capaz de monitorar os diretórios utilizados pela operação e preparar os dados estruturados necessários ao Cartevy.
+
+O processo local não deve gravar diretamente nas tabelas oficiais do CRM.
+
+### RF-030 — Staging temporário
+
+Os dados preparados pelo processo local devem permanecer disponíveis de forma persistente o suficiente para sobreviver à reinicialização do computador e permitir validação posterior.
+
+O staging temporário não representa histórico comercial oficial.
+
+Antes da confirmação, uma nova preparação do mesmo número de pedido poderá substituir a versão temporária anterior.
+
+### RF-031 — Validação via Telegram
+
+O fluxo de ingestão deve prever validação dos pedidos preparados por meio do bot do Telegram.
+
+O bot deverá validar os dados estruturados preparados e somente após confirmação promover o pedido ao banco oficial do CRM.
+
+Pedido já confirmado no CRM não deverá ser sobrescrito silenciosamente.
+
 ## 4. Requisitos não funcionais
 
 ### RNF-001 — Responsividade
@@ -215,46 +265,68 @@ O sistema deve concentrar o acompanhamento comercial, e não substituir sistemas
 
 ### RN-002 — Pedido como unidade central
 
-Pedido, cliente e histórico comercial devem estar vinculados de forma consistente.
+Todo pedido confirmado deve existir como registro comercial próprio.
+
+O vínculo com cliente é opcional quando a venda não possuir cadastro formal.
 
 ### RN-003 — Duplicidade por pedido
 
-O número do pedido deve ser tratado como chave de prevenção de duplicidade.
+O número do pedido deve prevenir duplicidade dentro da organização.
+
+Pedido já confirmado não deve ser sobrescrito silenciosamente.
 
 ### RN-004 — Histórico por cliente
 
-O histórico do cliente deve refletir seus pedidos, interações e pendências vinculadas.
+Somente pedidos explicitamente vinculados ao cliente devem compor seu histórico.
 
 ### RN-005 — Follow-up como acompanhamento
 
-Follow-up deve funcionar como registro de ação comercial futura, com status e data de execução ou conclusão.
+Follow-up deve representar ação comercial futura para cliente formalmente cadastrado.
 
 ### RN-006 — Encomenda como pendência comercial
 
-Encomenda deve representar uma pendência ou acompanhamento específico relacionado ao pedido e ao relacionamento com o cliente.
+Encomenda deve representar pendência ou acompanhamento relacionado à rotina comercial.
 
 ### RN-007 — Validação por fluxo controlado
 
-Qualquer dado originado de PDF ou automação externa deve passar por validação antes da confirmação final no sistema.
+Dados originados de PDF ou automação externa devem ser validados antes da confirmação final.
 
-## 6. Requisitos condicionados
+### RN-008 — Código interno define cliente formal
 
-### RC-001 — Telegram
+A existência de código interno determina se o pedido poderá criar ou reutilizar cliente.
 
-A utilização de um bot do Telegram como canal auxiliar para recebimento e processamento de PDFs deve ser tratada como requisito condicionado.
+Sem código interno, a venda permanece sem cliente cadastrado.
 
-Sua obrigatoriedade para a primeira entrega depende de confirmação formal antes do aceite do MVP.
+### RN-009 — Nome não identifica cliente
 
-### RC-002 — Monitor local
+Nome isolado nunca deve ser utilizado para mesclar ou reutilizar clientes automaticamente.
 
-O uso de um monitor local para observar diretórios e identificar novos PDFs deve ser tratado como requisito condicionado.
+### RN-010 — Enriquecimento sem sobrescrita
 
-A presença de um arquivo em diretório não deve ser interpretada automaticamente como pedido válido. A confirmação deve ocorrer por fluxo controlado.
+Dados da origem podem preencher campos ainda vazios.
+
+Valores existentes não devem ser substituídos silenciosamente.
+
+### RN-011 — Venda sem cadastro
+
+Venda sem cadastro deve participar dos cálculos diário, semanal, mensal e demais indicadores baseados em pedidos.
+
+Ela não deve gerar histórico de cliente ou follow-up.
+
+### RN-012 — Imutabilidade do pedido confirmado
+
+Depois de confirmado no CRM, um pedido não deve ser sobrescrito silenciosamente.
+
+Revisões anteriores à confirmação pertencem ao estágio temporário.
+
+### RN-013 — Elegibilidade para follow-up
+
+Somente pedidos associados a cliente formalmente cadastrado devem participar do fluxo de follow-up.
+## 6. Integrações condicionadas
 
 ### RC-003 — Integrações auxiliares futuras
 
-Outras integrações de automação ou canais externos devem ser tratadas como futuras e dependentes de decisão formal.
-
+Integrações adicionais que não façam parte do fluxo aprovado de monitor local e Telegram permanecem condicionadas a decisão futura.
 ## 7. Requisitos futuros
 
 ### RFU-001 — Múltiplos usuários
@@ -315,12 +387,18 @@ Isso permitirá relacionar documentação, código, testes e alterações futura
 
 ## 9. Estado do documento
 
-A versão 0.2 consolida correções de rastreabilidade e complementa requisitos funcionais necessários para manter aderência ao escopo aprovado do MVP, sem alterar seus limites, regras de negócio ou condicionamentos.
+A versão 0.3 incorpora as regras de domínio confirmadas durante a Fase 3.
 
-A versão 0.2 está **Aprovada** como referência oficial para os requisitos do produto.
+Foram formalizados:
 
-Atualizações futuras devem preservar a coerência com PRD-001, PRD-002 e PRD-004 e devem ser acompanhadas de revisão de versão e status documental.
+- código interno como identidade formal do cliente;
+- ausência de associação automática por nome;
+- vendas sem cadastro formal;
+- itens estruturados;
+- enriquecimento somente de campos vazios;
+- bloqueio de sobrescrita silenciosa;
+- separação entre preparação temporária e histórico oficial;
+- monitor local e Telegram como fluxo aprovado de ingestão futura;
+- follow-up restrito a clientes formalmente cadastrados.
 
-Nenhum requisito descrito aqui deverá ser interpretado automaticamente como funcionalidade já implementada.
-
-O estado real de implementação deverá ser acompanhado pelo roadmap, histórico do projeto e documentação técnica.
+O documento permanece aprovado como referência dos requisitos do produto.

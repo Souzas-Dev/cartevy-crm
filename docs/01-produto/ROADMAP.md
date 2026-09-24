@@ -1,7 +1,7 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.7
+**Versão:** 0.8
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 23/09/2026
@@ -16,53 +16,47 @@ Ele não substitui os requisitos detalhados e deve ser usado como referência de
 
 ## 2. Estado atual
 
-O projeto concluiu a **Fase 2 — Fundação da aplicação** e está em andamento na **Fase 3 — Persistência e domínio**.
+O projeto concluiu a **Fase 3 — Persistência e domínio**.
 
-A fundação visual e navegável entregue na Fase 2 permanece válida, incluindo:
+A persistência foi revisada a partir de pedidos reais da operação e validada contra o PostgreSQL gerenciado pelo Supabase.
 
-- Route Group `(crm)`;
-- shell compartilhado;
-- Dashboard;
-- Pedidos;
-- Clientes;
-- Follow-ups;
-- Encomendas;
-- Configurações;
-- sidebar adaptativa;
-- identificação visual da rota ativa;
-- modos claro e escuro;
-- persistência local da preferência de tema;
-- componentes reutilizáveis;
-- responsividade inicial;
-- acessibilidade básica;
-- validação por lint, build e navegação manual.
+A Fase 3 entregou:
 
-Na Fase 3 já foram implementadas e validadas as seguintes capacidades:
+- PostgreSQL gerenciado pelo Supabase;
+- Prisma 7;
+- conexão TLS validada com CA oficial do Supabase;
+- cinco migrations aplicadas e versionadas;
+- `Organization`;
+- `AppUser`;
+- `Customer`;
+- `Order`;
+- `OrderItem`;
+- `FollowUp`;
+- `Backorder`;
+- pedidos com ou sem cliente formalmente cadastrado;
+- snapshot do nome apresentado no pedido;
+- código interno obrigatório para `Customer`;
+- ausência de associação automática por nome;
+- enriquecimento apenas de campos vazios;
+- preservação de valores já existentes;
+- gravação transacional de pedido e itens;
+- prevenção de duplicidade de pedido confirmado;
+- isolamento por organização;
+- foreign keys compostas;
+- RLS habilitado;
+- seed controlado;
+- testes de domínio;
+- teste real de persistência contra o Supabase;
+- integração contínua e proteção da branch `main`.
 
-- PostgreSQL gerenciado pelo Supabase como persistência da aplicação;
-- Prisma 7 como ORM e mecanismo de migrations;
-- conexão de runtime por Supavisor Transaction Pooler;
-- conexão de migrations por Supavisor Session Pooler;
-- verificação TLS com CA do Supabase e `rejectUnauthorized: true`;
-- modelagem inicial de Organization, AppUser, Customer, Order, FollowUp e Backorder;
-- preparação multi-tenant por `organizationId` e relacionamentos compostos;
-- constraints de integridade para documentos, telefone, valores e conclusão de follow-ups;
-- migration inicial do domínio;
-- migration adicional de hardening para RLS e índices de foreign keys;
-- RLS habilitado nas seis tabelas de aplicação e na tabela `_prisma_migrations`;
-- testes iniciais de normalização, validação, invariantes e classificação de follow-ups;
-- integração contínua pelo GitHub Actions;
-- proteção da branch `main`, exigindo Pull Request e o check `Quality`.
+A autenticação permanece fora da Fase 3.
 
-A Fase 3 ainda não está concluída. Permanecem nesta etapa a consolidação da camada de persistência do domínio, serviços/repositórios, seed controlado e testes de persistência suficientes para sustentar o núcleo comercial.
-
-A autenticação permanece fora do escopo da Fase 3 e será tratada na Fase 4.
-
+A próxima etapa é a **Fase 4 — Autenticação**.
 ## 3. Fases do projeto
 
 ### Fase 0 — Fundação documental
 
-**Status:** concluída
+**Status:** Aprovado
 
 Objetivo:
 
@@ -73,7 +67,7 @@ Objetivo:
 
 ### Fase 1 — Estrutura técnica do projeto
 
-**Status:** concluída
+**Status:** Aprovado
 
 Objetivo:
 
@@ -96,7 +90,7 @@ Progresso registrado:
 
 ### Fase 2 — Fundação da aplicação
 
-**Status:** concluída
+**Status:** Aprovado
 
 Objetivo:
 
@@ -126,41 +120,39 @@ A paleta neutra utilizada durante esta fase permanece provisória.
 
 ### Fase 3 — Persistência e domínio
 
-**Status:** em andamento
+**Status:** concluída
 
 Objetivo:
 
 - modelar os dados principais;
 - definir persistência e integridade;
-- estabelecer as regras de negócio centrais;
+- estabelecer regras centrais de domínio;
 - preparar uma base segura para o núcleo comercial.
 
-Entregas já concluídas nesta fase:
+Entregas concluídas:
 
-- escolha arquitetural de PostgreSQL gerenciado pelo Supabase;
-- integração do Prisma 7 com PostgreSQL;
-- schema inicial do domínio;
-- migrations versionadas;
-- constraints de integridade;
-- RLS habilitado desde a fundação;
-- índices adicionais para foreign keys compostas;
-- testes iniciais de domínio;
-- CI no GitHub Actions;
-- proteção da branch `main`.
-
-Pendências da fase:
-
+- PostgreSQL gerenciado pelo Supabase;
+- Prisma 7;
+- cinco migrations aplicadas;
+- constraints e índices;
+- RLS habilitado;
+- modelo revisado com pedidos reais;
+- entidade `OrderItem`;
+- pedidos sem `Customer` para vendas sem cadastro;
+- código interno obrigatório em clientes formais;
+- nome fora da estratégia de identidade;
+- enriquecimento controlado;
+- bloqueio de sobrescrita silenciosa;
+- repositories e services;
+- persistência transacional;
 - seed controlado;
-- camada de persistência do domínio;
-- serviços/repositórios;
-- testes de persistência e isolamento por organização;
-- consolidação das regras de criação, consulta e atualização necessárias ao núcleo comercial.
+- testes de domínio;
+- testes reais de persistência e isolamento.
 
-A autenticação e as policies de acesso associadas a identidades autenticadas permanecem fora desta fase.
-
+A Fase 3 não inclui autenticação, policies RLS baseadas em identidade, CRUD comercial completo, monitor Python, bot do Telegram ou geração automática de follow-ups.
 ### Fase 4 — Autenticação
 
-**Status:** futura
+**Status:** próxima
 
 Objetivo:
 
@@ -171,7 +163,7 @@ Objetivo:
 
 ### Fase 5 — Núcleo comercial
 
-**Status:** futura
+**Status:** Aprovado
 
 Objetivo:
 
@@ -179,29 +171,33 @@ Objetivo:
 - consolidar o cotidiano operacional do CRM;
 - permitir uso real do sistema sem dependência de automações auxiliares.
 
-### Fase 6 — Importação de pedidos por PDF
+### Fase 6 — Ingestão local e preparação de pedidos
 
 **Status:** futura
 
 Objetivo:
 
-- reduzir a digitação manual;
-- extrair dados estruturados de pedidos em PDF;
-- validar e registrar informações relevantes;
-- prevenir duplicidade de pedidos.
+- implementar o monitor Python da estrutura local de pedidos;
+- extrair somente os campos definidos para o Cartevy;
+- preparar dados estruturados temporários;
+- manter a preparação resistente a reinicialização;
+- preservar a versão mais recente de um pedido antes da confirmação;
+- disponibilizar os dados para validação posterior.
 
-### Fase 7 — Integrações condicionadas
+### Fase 7 — Validação operacional via Telegram
 
-**Status:** condicionada
+**Status:** futura
 
 Objetivo:
 
-- implementar canais auxiliares apenas se a necessidade for confirmada;
-- manter Telegram e monitor local como capacidades planejadas, mas não obrigatórias para o MVP inicial.
-
+- implementar o bot do Telegram como etapa de validação;
+- validar os pedidos contra os dados preparados;
+- promover somente pedidos confirmados ao banco oficial;
+- preservar idempotência;
+- impedir sobrescrita silenciosa de pedido já confirmado.
 ### Fase 8 — Deploy e estabilização
 
-**Status:** futura
+**Status:** Aprovado
 
 Objetivo:
 
@@ -211,7 +207,7 @@ Objetivo:
 
 ### Fase 9 — Validação do MVP
 
-**Status:** futura
+**Status:** Aprovado
 
 Objetivo:
 
@@ -249,10 +245,14 @@ A modelagem atual já prepara associações por organização e responsável, ma
 
 ## 6. Estado do documento
 
-A versão 0.7 registra o início efetivo da **Fase 3 — Persistência e domínio**.
+A versão 0.8 registra a conclusão da **Fase 3 — Persistência e domínio**.
 
-Nesta versão passam a constar como implementadas a fundação PostgreSQL/Supabase, a integração com Prisma 7, a modelagem inicial do domínio, as migrations, o hardening de RLS e índices, os testes iniciais de domínio e o pipeline de CI com proteção da branch `main`.
+A etapa foi encerrada após revisão do modelo com pedidos reais, aplicação de cinco migrations, implementação da camada transacional de persistência e validação contra o PostgreSQL real.
 
-A Fase 3 permanece **em andamento**.
+Também passa a constar como direção aprovada para a futura ingestão:
 
-Autenticação, autorização completa, policies baseadas em identidade, CRUD comercial e demais entregas do núcleo comercial ainda não são consideradas concluídas.
+`pasta local → monitor Python → staging temporário → Telegram → validação → PostgreSQL oficial → Cartevy CRM`.
+
+Monitor local, staging e Telegram ainda não estão implementados.
+
+A **Fase 4 — Autenticação** passa a ser a próxima etapa.

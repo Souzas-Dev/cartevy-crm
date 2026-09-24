@@ -1,7 +1,7 @@
 # Índice Documental
 
 **Documento:** GOV-002 — Índice Documental
-**Versão:** 0.2
+**Versão:** 0.3
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 23/09/2026
@@ -24,13 +24,13 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **GOV-002 — Índice Documental**
   Arquivo: [INDICE.md](INDICE.md)
-  Versão: 0.2
+  Versão: 0.3
   Status: Aprovado
   Finalidade: mapear a documentação controlada do projeto.
 
 - **GOV-003 — Changelog Documental**
   Arquivo: [CHANGELOG.md](CHANGELOG.md)
-  Versão: 0.2
+  Versão: 0.3
   Status: Aprovado
   Finalidade: registrar mudanças relevantes na documentação controlada.
 
@@ -44,19 +44,19 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **PRD-002 — Escopo do MVP**
   Arquivo: [../01-produto/ESCOPO-MVP.md](../01-produto/ESCOPO-MVP.md)
-  Versão: 0.2
+  Versão: 0.3
   Status: Aprovado
   Finalidade: definir o escopo da primeira entrega e os limites do MVP.
 
 - **PRD-003 — Requisitos do Produto**
   Arquivo: [../01-produto/REQUISITOS.md](../01-produto/REQUISITOS.md)
-  Versão: 0.2
+  Versão: 0.3
   Status: Aprovado
   Finalidade: consolidar requisitos funcionais, regras de negócio e condicionamentos do produto.
 
 - **PRD-004 — Roadmap do Produto**
   Arquivo: [../01-produto/ROADMAP.md](../01-produto/ROADMAP.md)
-  Versão: 0.7
+  Versão: 0.8
   Status: Aprovado
   Finalidade: organizar as fases de evolução do projeto e sua progressão.
 
@@ -64,7 +64,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **ARC-001 — Arquitetura da Aplicação**
   Arquivo: [../02-arquitetura/ARQUITETURA.md](../02-arquitetura/ARQUITETURA.md)
-  Versão: 0.3
+  Versão: 0.4
   Status: Aprovado
   Finalidade: registrar as decisões arquiteturais conhecidas e sustentadas pelo projeto.
 
@@ -99,6 +99,4 @@ Esses itens permanecem previstos na estrutura documental e não devem ser tratad
 
 Este índice reflete a documentação controlada vigente do Cartevy CRM.
 
-A atualização de 23/09/2026 sincroniza as versões de PRD-004 e ARC-001 e inclui ADR-002 após a formalização da fundação de persistência.
-
-Conforme GOV-001 seção 9.1, esta sincronização operacional não altera a versão do índice.
+A versão 0.3, de 23/09/2026, reflete as versões aprovadas de GOV-002, GOV-003, PRD-002, PRD-003, PRD-004 e ARC-001 no fechamento documental da Fase 3 — Persistência e domínio.

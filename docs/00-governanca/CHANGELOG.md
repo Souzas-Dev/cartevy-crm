@@ -1,7 +1,7 @@
 # Changelog Documental
 
 **Documento:** GOV-003 — Changelog Documental
-**Versão:** 0.2
+**Versão:** 0.3
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
 **Última atualização:** 23/09/2026
@@ -49,10 +49,27 @@ A finalidade é manter rastreabilidade sobre documentos aprovados, consolidaçõ
 - sincronização operacional do GOV-002 v0.2 para refletir PRD-004 v0.7, ARC-001 v0.3 e ADR-002 v0.1;
 - sincronização operacional deste GOV-003 v0.2 conforme a regra da seção 9.1 do GOV-001.
 
+#### Fechamento da Fase 3 — Persistência e domínio
+
+- aprovação do PRD-002 v0.3;
+- aprovação do PRD-003 v0.3;
+- aprovação do PRD-004 v0.8;
+- aprovação do ARC-001 v0.4;
+- conclusão formal da Fase 3 — Persistência e domínio, com a Fase 4 — Autenticação como próxima etapa;
+- revisão do modelo com base em pedidos reais e inclusão de `OrderItem`, com descrição/nome, quantidade decimal e unidade em texto aberto;
+- suporte a pedidos sem cliente formal, válidos para indicadores de vendas, sem histórico de cliente ou follow-up, e preservação de `customerName` como snapshot no pedido;
+- definição de `Customer.internalCode` como obrigatório e do código interno como identidade formal do `Customer`, com nome fora da estratégia automática de identidade;
+- enriquecimento do cliente apenas em campos vazios, sem substituir valores existentes, e bloqueio de sobrescrita silenciosa de pedidos confirmados;
+- consolidação da camada de persistência transacional, repositories, services, seed controlado e testes reais contra PostgreSQL/Supabase;
+- registro de cinco migrations aplicadas: `20260923_initial_domain`, `20260923_harden_persistence`, `20260923_refine_crm_domain`, `20260923_support_unregistered_customer_orders` e `20260923_enforce_registered_customer_identity`; migrations aplicadas são imutáveis;
+- confirmação do fluxo futuro de ingestão: pasta local → monitor Python → staging temporário → Telegram → validação → banco oficial PostgreSQL → Cartevy CRM; monitor, staging e Telegram estão aprovados para fases futuras e ainda não implementados;
+- manutenção do RLS habilitado, com policies baseadas em identidade pendentes de autenticação/autorização, e da preparação multi-tenant como fronteira técnica futura, sem funcionalidade multiempresa disponível;
+- atualização do README e aprovação do GOV-002 v0.3 e do GOV-003 v0.3 para consolidar o fechamento documental.
+
 ## 3. Estado do documento
 
 Este changelog representa a linha de registro documental disponível para o projeto.
 
 Novas mudanças relevantes devem ser incluídas aqui somente quando houver alteração documental efetiva, aprovada e rastreável.
 
-A atualização de 23/09/2026 é operacional e, conforme GOV-001 seção 9.1, não exige incremento de versão deste documento.
+A versão 0.3, de 23/09/2026, consolida o fechamento documental da Fase 3 — Persistência e domínio e preserva os registros históricos anteriores.

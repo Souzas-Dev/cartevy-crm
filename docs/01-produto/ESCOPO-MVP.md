@@ -1,10 +1,10 @@
 # Escopo do MVP
 
 **Documento:** PRD-002 — Escopo do MVP
-**Versão:** 0.2
+**Versão:** 0.3
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 22/09/2026
+**Última atualização:** 23/09/2026
 
 ---
 
@@ -95,43 +95,58 @@ Os cálculos, filtros e critérios específicos dos indicadores serão definidos
 
 ### 4.3 Pedidos
 
-O MVP deverá permitir registrar e consultar pedidos vinculados aos respectivos clientes.
+O MVP deverá registrar e consultar os pedidos confirmados que compõem a operação comercial.
 
-A área de pedidos deverá permitir acompanhar informações comerciais essenciais, incluindo:
+Cada pedido deverá preservar:
 
 - número do pedido;
-- cliente;
-- data do pedido;
-- valor total;
-- origem do registro;
-- observações comerciais;
-- histórico relacionado.
+- nome apresentado no pedido;
+- data de entrada oficial no CRM;
+- total de produtos;
+- desconto total;
+- frete ou taxa de entrega;
+- total geral;
+- itens com descrição, quantidade e unidade de medida.
 
-O sistema deverá impedir registros duplicados quando o mesmo número de pedido já estiver cadastrado.
+Um pedido poderá existir sem vínculo com cliente formalmente cadastrado.
 
-Regras de validação, campos obrigatórios e comportamentos específicos serão definidos em `PRD-003 — Requisitos do Produto`.
+Pedidos sem cliente cadastrado continuarão participando dos indicadores de vendas.
 
+Pedidos confirmados não deverão ter seus valores importados alterados manualmente.
+
+O sistema deverá impedir o registro duplicado do mesmo número de pedido dentro da mesma organização.
 ### 4.4 Clientes
 
-O MVP deverá permitir cadastrar, consultar e atualizar clientes relacionados à operação comercial.
+O MVP deverá manter cadastro de cliente somente quando existir código interno da operação de origem.
 
-O cadastro de clientes deverá concentrar informações essenciais para identificação e acompanhamento, incluindo:
+O código interno caracteriza o cliente formalmente cadastrado.
 
+O cadastro poderá conter:
+
+- código interno;
 - nome;
-- CPF ou CNPJ, quando aplicável;
-- telefone;
-- código interno, quando disponível;
+- CPF ou CNPJ, quando disponível;
+- WhatsApp, quando disponível;
 - observações comerciais;
 - histórico de pedidos vinculados;
 - histórico de follow-ups relacionados.
 
-O sistema deverá permitir localizar clientes de forma rápida e acessar seu histórico comercial em um único ponto.
+Nome isolado não deverá ser utilizado como chave de identidade.
 
-Regras de identificação, validação e prevenção de duplicidades serão definidas em `PRD-003 — Requisitos do Produto`.
+Duas pessoas com o mesmo nome poderão permanecer como registros independentes.
 
+Dados recebidos posteriormente poderão preencher campos ainda vazios, mas não deverão substituir silenciosamente valores existentes.
+
+WhatsApp e observações poderão ser atualizados manualmente.
+
+Nome, código interno e documento provenientes da origem não deverão ser editados manualmente no fluxo normal.
 ### 4.5 Follow-ups
 
-O MVP deverá permitir registrar e acompanhar ações comerciais relacionadas a clientes e pedidos.
+O MVP deverá permitir registrar e acompanhar ações comerciais relacionadas a clientes formalmente cadastrados.
+
+Pedidos vinculados a um cliente poderão participar do histórico comercial e do fluxo de follow-up.
+
+Vendas sem cadastro formal de cliente não deverão gerar histórico de cliente nem follow-up.
 
 Cada follow-up deverá permitir identificar:
 
@@ -142,10 +157,7 @@ Cada follow-up deverá permitir identificar:
 - status;
 - observações.
 
-O sistema deverá facilitar a visualização de follow-ups pendentes e concluídos.
-
-Regras de status, priorização e encerramento serão definidas em `PRD-003 — Requisitos do Produto`.
-
+As regras de criação automática, prazo e cadência serão definidas posteriormente no núcleo comercial.
 ### 4.6 Encomendas
 
 O MVP deverá permitir registrar e acompanhar encomendas que ainda dependam de alguma ação comercial ou disponibilidade futura.
@@ -185,61 +197,53 @@ A consulta deverá permitir encontrar registros por informações relevantes, co
 
 Os critérios de busca, filtros e comportamento dos resultados serão definidos em `PRD-003 — Requisitos do Produto`.
 
-### 4.8 Importação de pedidos por PDF
+### 4.8 Ingestão de pedidos a partir de PDF
 
-O MVP deverá permitir importar dados de pedidos a partir de arquivos PDF utilizados na rotina comercial.
+Os pedidos em PDF da rotina comercial serão utilizados como fonte para preparação dos dados.
 
-A importação deverá considerar, quando disponíveis no documento:
+A extração deverá considerar somente os dados necessários ao Cartevy, incluindo:
 
 - número do pedido;
-- código interno do cliente;
-- nome do cliente;
-- CPF ou CNPJ;
-- telefone;
-- data do pedido;
-- valor total.
+- nome apresentado;
+- código interno, quando existente;
+- CPF ou CNPJ, quando existente;
+- WhatsApp, quando existente;
+- total de produtos;
+- desconto total;
+- frete;
+- total geral;
+- itens com descrição, quantidade e unidade.
 
-Os dados extraídos deverão ser validados antes do registro definitivo.
+O PDF não precisa ser armazenado permanentemente pelo CRM.
 
-O sistema deverá impedir a criação de pedido duplicado quando o número do pedido já estiver cadastrado.
+Dados extraídos localmente ainda não representam histórico oficial do Cartevy.
 
-O arquivo PDF não precisa ser armazenado de forma permanente pelo CRM.
+### 4.9 Validação via Telegram
 
-Detalhes de extração, validação e tratamento de erros serão definidos em `PRD-003 — Requisitos do Produto`.
+O fluxo aprovado prevê um bot do Telegram como etapa de validação e confirmação.
 
-### 4.9 Integração auxiliar via Telegram — condicionada
+O bot deverá operar sobre os dados estruturados preparados anteriormente.
 
-O MVP poderá utilizar um bot do Telegram como canal auxiliar para envio de arquivos PDF destinados à importação no CRM.
+Somente após validação e confirmação o pedido deverá ser persistido nas tabelas oficiais do CRM.
 
-A integração deverá permitir:
+Pedido já confirmado não deverá ser sobrescrito silenciosamente por nova entrada com o mesmo número.
 
-- receber arquivos PDF encaminhados pelo usuário;
-- encaminhar o arquivo para processamento;
-- retornar confirmação de recebimento ou erro;
-- informar o resultado da importação;
-- evitar criação de pedidos duplicados.
+### 4.10 Monitor local e preparação temporária
 
-O Telegram será utilizado como apoio ao fluxo operacional e não substituirá a interface principal do CRM.
+O fluxo aprovado prevê um processo Python local para observar a estrutura de pedidos organizada por mês e dia.
 
-Detalhes de autenticação, processamento e comunicação com o CRM serão definidos na documentação de integração correspondente.
+Esse processo deverá:
 
-### 4.10 Monitor local de arquivos — condicionado
+- identificar os pedidos;
+- extrair os campos relevantes;
+- preparar dados estruturados temporários;
+- sobreviver à reinicialização do computador;
+- manter a versão mais recente de um pedido antes da confirmação;
+- disponibilizar os dados para validação posterior.
 
-O MVP poderá utilizar um processo local auxiliar para observar diretórios utilizados na rotina comercial e identificar novos arquivos PDF.
+A preparação local e o staging temporário não fazem parte do histórico oficial do CRM.
 
-O monitor deverá atuar apenas como apoio à automação e não deverá considerar automaticamente todo arquivo encontrado como um pedido válido.
-
-Seu uso poderá contemplar:
-
-- identificação de novos PDFs;
-- encaminhamento de arquivos para análise;
-- registro de eventos de processamento;
-- apoio à detecção de documentos já processados.
-
-A confirmação de que um documento representa um pedido válido deverá ocorrer por fluxo controlado antes do registro definitivo no CRM.
-
-Detalhes de execução, diretórios monitorados e integração com o CRM serão definidos na documentação técnica correspondente.
-
+O PostgreSQL oficial deverá receber somente pedidos confirmados.
 ## 5. Escopo excluído do MVP
 
 A primeira versão não deverá contemplar funcionalidades que desviem o produto de seu objetivo central de acompanhamento comercial.
@@ -342,8 +346,17 @@ Qualquer alteração aprovada no escopo deverá resultar na revisão deste docum
 
 ## 10. Estado do documento
 
-A versão 0.2 corrige a consistência documental do escopo sem alterar as capacidades, limites ou critérios de aceite definidos para o MVP.
+A versão 0.3 incorpora as regras confirmadas a partir da análise de pedidos reais da operação.
 
-A versão 0.2 está **Aprovada** como referência oficial para a primeira versão operacional do produto.
+Passam a fazer parte do escopo aprovado:
 
-Qualquer alteração relevante de escopo deverá seguir o processo de versionamento e atualização definido em `GOV-001 — Padrão de Documentação`.
+- pedidos confirmados com itens estruturados;
+- vendas sem cadastro formal contabilizadas sem criação de cliente;
+- código interno como fronteira para existência de cliente formal;
+- nome não utilizado como chave de identidade;
+- enriquecimento somente de campos vazios;
+- preservação de valores existentes;
+- monitor local e Telegram como partes planejadas do fluxo de ingestão;
+- persistência oficial somente após validação controlada.
+
+Monitor local, bot do Telegram e automação de follow-up ainda não são funcionalidades implementadas.
