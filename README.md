@@ -12,23 +12,25 @@ A proposta principal é centralizar informações da rotina comercial, preservar
 
 ## Estado atual
 
-O projeto está na **Fase 3 — Persistência e domínio**, em andamento.
+As **Fases 0, 1, 2 e 3 estão concluídas**. A próxima etapa é a **Fase 4 — Autenticação**.
 
 Já estão concluídas:
 
 - fundação documental;
 - estrutura técnica do projeto;
 - fundação navegável da aplicação;
-- modelagem inicial do domínio comercial;
+- modelagem do domínio comercial revisada com base em pedidos reais;
 - persistência PostgreSQL gerenciada pelo Supabase;
 - integração com Prisma 7;
-- migrations iniciais e hardening do banco;
+- cinco migrations aplicadas e hardening do banco;
 - RLS habilitado nas tabelas da aplicação;
-- validações e testes iniciais de domínio;
+- validações e testes de domínio e persistência;
+- repositories, services e persistência transacional de pedidos confirmados;
+- seed controlado;
 - CI com GitHub Actions;
 - proteção da branch `main` com Pull Request e check `Quality` obrigatórios.
 
-A Fase 3 ainda não está concluída. Permanecem para esta etapa a consolidação da camada de persistência do domínio, serviços/repositórios, seed controlado e testes de persistência antes da entrada no núcleo comercial.
+A autenticação e o núcleo comercial completo ainda não estão implementados. Monitor Python, staging e Telegram fazem parte do fluxo futuro aprovado e também ainda não estão implementados.
 
 ## Escopo resumido
 
@@ -59,7 +61,8 @@ cartevy-crm/
 │   │   ├── app/
 │   │   ├── components/
 │   │   ├── domain/
-│   │   └── lib/
+│   │   ├── lib/
+│   │   └── server/
 │   └── ...
 ├── docs/
 │   ├── 00-governanca/
@@ -88,18 +91,46 @@ A autenticação ainda não faz parte da implementação atual e permanece plane
 
 ## Persistência e domínio
 
-A modelagem inicial contempla:
+A modelagem atual contempla:
 
 - Organization;
 - AppUser;
 - Customer;
 - Order;
+- OrderItem;
 - FollowUp;
 - Backorder.
 
 A estrutura foi preparada para associação por organização desde a fundação, com chaves e relacionamentos compostos para reduzir o risco de referências entre organizações diferentes.
 
+As regras atuais são:
+
+- `Customer` representa cliente formalmente cadastrado; `Customer.internalCode` é obrigatório e o código interno é a identidade formal usada para reutilização. Nome não é chave automática de identidade;
+- `Order` pode existir sem `Customer`: pedido sem código interno continua sendo venda válida para indicadores, mas não gera histórico de cliente ou follow-up;
+- `customerName` é preservado como snapshot do nome apresentado na origem do pedido;
+- dados de origem podem preencher campos vazios do cliente, mas não sobrescrever valores existentes;
+- pedido confirmado não é sobrescrito silenciosamente;
+- `OrderItem` contém, como dados comerciais, descrição/nome, quantidade e unidade; quantidade pode ser decimal e unidade é texto aberto.
+
+A camada server-side usa repositories e services. A persistência de pedido confirmado é transacional: verifica duplicidade, resolve ou cria cliente quando aplicável, cria o pedido e seus itens e retorna o agregado persistido.
+
+Existem exatamente cinco migrations aplicadas:
+
+1. `20260923_initial_domain`;
+2. `20260923_harden_persistence`;
+3. `20260923_refine_crm_domain`;
+4. `20260923_support_unregistered_customer_orders`;
+5. `20260923_enforce_registered_customer_identity`.
+
+Migrations aplicadas são imutáveis; alterações futuras devem ocorrer por novas migrations versionadas.
+
 RLS está habilitado nas tabelas da aplicação, mas policies de acesso ainda não foram criadas. Essa decisão é intencional até que autenticação e autorização sejam implementadas na Fase 4.
+
+O fluxo futuro aprovado de ingestão é:
+
+`pasta local → monitor Python → staging temporário → Telegram → validação → PostgreSQL oficial → Cartevy CRM`.
+
+Esse fluxo está planejado e aprovado, mas ainda não implementado. O monitor não escreve diretamente nas tabelas oficiais; somente pedidos validados entram no histórico oficial.
 
 ## Qualidade e fluxo de contribuição
 
@@ -146,16 +177,17 @@ A branch `main` é protegida. O fluxo esperado é:
 | Fundação documental | Concluída |
 | Estrutura técnica do projeto | Concluída |
 | Fundação da aplicação | Concluída |
-| Persistência e domínio | Em andamento |
-| Autenticação | Não iniciada |
+| Persistência e domínio | Concluída |
+| Autenticação | Próxima |
 | Núcleo comercial | Não iniciado |
 | Importação de PDFs | Planejada |
-| Telegram | Condicionado |
-| Monitor local | Condicionado |
-| Deploy | Não iniciado |
+| Monitor local / extração | Planejado |
+| Staging temporário | Planejado |
+| Telegram / validação | Planejado |
+| Deploy e estabilização | Não iniciado |
 
 ## Observação
 
 Funcionalidades e capacidades devem ser tratadas conforme seu estado real de implementação.
 
-A preparação multi-tenant existente na modelagem não substitui autenticação, autorização nem filtros server-side por organização. Esses controles serão implementados e validados nas fases correspondentes.
+A preparação multi-tenant é uma fronteira técnica para evolução futura; não existe funcionalidade multiempresa disponível no MVP atual. RLS não substitui o isolamento server-side por organização já aplicado na persistência. Autenticação, autorização e policies baseadas em identidade permanecem para a Fase 4.
