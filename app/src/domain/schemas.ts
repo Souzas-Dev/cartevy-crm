@@ -36,13 +36,13 @@ export const organizationInputSchema = z.object({
 
 export const appUserInputSchema = z.object({
   organizationId: z.string().uuid(),
-  authUserId: z.string().uuid().optional(),
   name: z.string().trim().min(2).max(160),
   email: z
     .string()
     .trim()
     .email()
-    .transform(normalizeEmail),
+    .transform(normalizeEmail)
+    .optional(),
 });
 
 export const documentSchema = z

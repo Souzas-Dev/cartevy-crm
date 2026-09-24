@@ -6,6 +6,7 @@ import {
   assertSameOrganization,
 } from "../invariants";
 import {
+  appUserInputSchema,
   confirmedOrderInputSchema,
   customerContactUpdateSchema,
   customerImportInputSchema,
@@ -22,6 +23,35 @@ const otherOrganizationId =
 
 const customerId =
   "33333333-3333-4333-8333-333333333333";
+
+describe("app user domain", () => {
+  const input = { organizationId, name: "Eduardo Souza" };
+
+  it("accepts an app user without email", () => {
+    expect(appUserInputSchema.parse(input)).toEqual(input);
+  });
+
+  it("keeps normalization for optional cadastral email", () => {
+    expect(appUserInputSchema.parse({
+      ...input,
+      email: " Eduardo@Example.com ",
+    }).email).toBe("eduardo@example.com");
+  });
+
+  it("still rejects invalid supplied email", () => {
+    expect(appUserInputSchema.safeParse({ ...input, email: "invalid" }).success).toBe(false);
+    expect(appUserInputSchema.safeParse({ ...input, email: "" }).success).toBe(false);
+  });
+
+  it("no longer includes external auth identity in parsed input", () => {
+    expect(appUserInputSchema.parse({ ...input, authUserId: organizationId })).toEqual(input);
+  });
+
+  it("preserves organization and name validation", () => {
+    expect(appUserInputSchema.safeParse({ ...input, organizationId: "invalid" }).success).toBe(false);
+    expect(appUserInputSchema.safeParse({ ...input, name: " " }).success).toBe(false);
+  });
+});
 
 describe("customer domain", () => {
   it("accepts a customer with only the required name", () => {

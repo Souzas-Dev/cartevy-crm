@@ -12,6 +12,24 @@ enum AppUserStatus {
   INACTIVE
 }
 
+enum AuthRateLimitScope {
+  USERNAME
+  IP
+}
+
+enum AuthSecurityEventType {
+  LOGIN_SUCCESS
+  LOGIN_FAILURE
+  LOGIN_RATE_LIMITED
+  SESSION_CREATED
+  SESSION_REVOKED
+  LOGOUT
+  PASSWORD_CHANGED
+  ACCOUNT_DISABLED
+  ACCOUNT_ENABLED
+  BOOTSTRAP_USER_CREATED
+}
+
 enum FollowUpStatus {
   PENDING
   COMPLETED
@@ -44,9 +62,8 @@ model Organization {
 model AppUser {
   id             String        @id @default(uuid()) @db.Uuid
   organizationId String        @map("organization_id") @db.Uuid
-  authUserId     String?       @unique @map("auth_user_id") @db.Uuid
   name           String        @db.VarChar(160)
-  email          String        @db.VarChar(254)
+  email          String?       @db.VarChar(254)
   status         AppUserStatus @default(ACTIVE)
   createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
@@ -58,10 +75,78 @@ model AppUser {
   followUps  FollowUp[]  @relation("FollowUpResponsibleUser")
   backorders Backorder[] @relation("BackorderResponsibleUser")
 
+  authCredential     AuthCredential?
+  authSessions       AuthSession[]
+  authSecurityEvents AuthSecurityEvent[]
+
   @@unique([organizationId, email])
   @@unique([id, organizationId])
   @@index([organizationId, status])
   @@map("app_users")
+}
+
+model AuthCredential {
+  id                String   @id @default(uuid()) @db.Uuid
+  appUserId         String   @unique @map("app_user_id") @db.Uuid
+  username          String   @unique @db.VarChar(40)
+  passwordHash      String   @map("password_hash") @db.Text
+  passwordChangedAt DateTime @default(now()) @map("password_changed_at") @db.Timestamptz(3)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  appUser AppUser @relation(fields: [appUserId], references: [id], onDelete: Cascade)
+
+  @@map("auth_credentials")
+}
+
+model AuthSession {
+  id                String    @id @default(uuid()) @db.Uuid
+  appUserId         String    @map("app_user_id") @db.Uuid
+  tokenHash         String    @unique @map("token_hash") @db.Char(64)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  lastSeenAt        DateTime  @default(now()) @map("last_seen_at") @db.Timestamptz(3)
+  idleExpiresAt     DateTime  @map("idle_expires_at") @db.Timestamptz(3)
+  absoluteExpiresAt DateTime  @map("absolute_expires_at") @db.Timestamptz(3)
+  revokedAt         DateTime? @map("revoked_at") @db.Timestamptz(3)
+
+  appUser AppUser @relation(fields: [appUserId], references: [id], onDelete: Cascade)
+
+  @@index([appUserId])
+  @@index([appUserId, revokedAt])
+  @@index([idleExpiresAt])
+  @@index([absoluteExpiresAt])
+  @@map("auth_sessions")
+}
+
+model AuthRateLimitBucket {
+  id              String             @id @default(uuid()) @db.Uuid
+  scope           AuthRateLimitScope
+  keyHash         String             @map("key_hash") @db.Char(64)
+  failureCount    Int                @default(0) @map("failure_count")
+  windowStartedAt DateTime           @default(now()) @map("window_started_at") @db.Timestamptz(3)
+  lastFailureAt   DateTime?          @map("last_failure_at") @db.Timestamptz(3)
+  blockedUntil    DateTime?          @map("blocked_until") @db.Timestamptz(3)
+  createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime           @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([scope, keyHash])
+  @@map("auth_rate_limit_buckets")
+}
+
+model AuthSecurityEvent {
+  id             String                @id @default(uuid()) @db.Uuid
+  appUserId      String?               @map("app_user_id") @db.Uuid
+  type           AuthSecurityEventType
+  identifierHash String?               @map("identifier_hash") @db.Char(64)
+  ipHash         String?               @map("ip_hash") @db.Char(64)
+  createdAt      DateTime              @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  appUser AppUser? @relation(fields: [appUserId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([type, createdAt])
+  @@index([appUserId, createdAt])
+  @@map("auth_security_events")
 }
 
 model Customer {

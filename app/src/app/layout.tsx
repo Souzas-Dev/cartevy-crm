@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { headers } from "next/headers";
 
 import "./globals.css";
 
@@ -10,17 +11,11 @@ export const metadata: Metadata = {
 
 const themeScript = `
 (() => {
+  let saved;
+  try { saved = localStorage.getItem("crm-theme"); } catch {}
   try {
-    const savedTheme = window.localStorage.getItem("crm-theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    const theme =
-      savedTheme === "light" || savedTheme === "dark"
-        ? savedTheme
-        : prefersDark
-          ? "dark"
-          : "light";
-
+    const theme = saved === "light" || saved === "dark" ? saved : (prefersDark ? "dark" : "light");
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.style.colorScheme = theme;
   } catch {}
@@ -31,11 +26,12 @@ type RootLayoutProps = Readonly<{
   children: ReactNode;
 }>;
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
 
       <body>{children}</body>

@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 
 type CrmShellProps = Readonly<{
   children: ReactNode;
+  logoutAction: () => Promise<void>;
 }>;
 
 type Theme = "light" | "dark";
@@ -25,10 +26,10 @@ function applyTheme(theme: Theme) {
 
   root.classList.toggle("dark", theme === "dark");
   root.style.colorScheme = theme;
-  window.localStorage.setItem("crm-theme", theme);
+  try { localStorage.setItem("crm-theme", theme); } catch {}
 }
 
-export function CrmShell({ children }: CrmShellProps) {
+export function CrmShell({ children, logoutAction }: CrmShellProps) {
   const pathname = usePathname();
 
   const [sidebarPinned, setSidebarPinned] = useState(false);
@@ -202,6 +203,10 @@ export function CrmShell({ children }: CrmShellProps) {
             </span>
           </div>
 
+          <div className="flex items-center gap-3">
+          <form action={logoutAction}>
+            <button type="submit" className="rounded-md border border-neutral-300 px-3 py-2 text-sm hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-neutral-700 dark:hover:bg-neutral-800">Sair</button>
+          </form>
           <button
             type="button"
             onClick={toggleTheme}
@@ -211,6 +216,7 @@ export function CrmShell({ children }: CrmShellProps) {
             <span className="dark:hidden">Modo escuro</span>
             <span className="hidden dark:inline">Modo claro</span>
           </button>
+          </div>
         </header>
 
         <main className="p-6 md:p-8">
