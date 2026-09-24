@@ -34,6 +34,7 @@ Um ADR deverá ser considerado quando houver:
 O projeto possui os seguintes ADRs aprovados:
 
 - `ADR-001 — Fundação Técnica Inicial da Aplicação`, versão 0.1;
-- `ADR-002 — Persistência PostgreSQL Gerenciada pelo Supabase`, versão 0.1.
+- `ADR-002 — Persistência PostgreSQL Gerenciada pelo Supabase`, versão 0.1;
+- `ADR-003 — Autenticação Própria da Aplicação`, versão 0.1.
 
-Permanecem pendentes de formalização conforme a evolução do projeto decisões importantes relacionadas a autenticação, autorização, hospedagem da aplicação e infraestrutura definitiva de execução.
+Permanecem pendentes de formalização conforme a evolução do projeto decisões importantes relacionadas à hospedagem da aplicação, infraestrutura definitiva de execução e futuras evoluções de autorização que excedam a fronteira server-side atualmente adotada.

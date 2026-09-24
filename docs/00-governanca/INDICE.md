@@ -4,7 +4,7 @@
 **Versão:** 0.3
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 23/09/2026
+**Última atualização:** 24/09/2026
 
 ---
 
@@ -56,7 +56,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **PRD-004 — Roadmap do Produto**
   Arquivo: [../01-produto/ROADMAP.md](../01-produto/ROADMAP.md)
-  Versão: 0.8
+  Versão: 0.9
   Status: Aprovado
   Finalidade: organizar as fases de evolução do projeto e sua progressão.
 
@@ -64,7 +64,7 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
 
 - **ARC-001 — Arquitetura da Aplicação**
   Arquivo: [../02-arquitetura/ARQUITETURA.md](../02-arquitetura/ARQUITETURA.md)
-  Versão: 0.4
+  Versão: 0.5
   Status: Aprovado
   Finalidade: registrar as decisões arquiteturais conhecidas e sustentadas pelo projeto.
 
@@ -79,6 +79,12 @@ Sua finalidade é facilitar a localização de documentos controlados e manter a
   Versão: 0.1
   Status: Aprovado
   Finalidade: formalizar PostgreSQL/Supabase, Prisma 7 e a estratégia de migrations da persistência.
+
+- **ADR-003 — Autenticação Própria da Aplicação**
+  Arquivo: [../02-arquitetura/decisoes/AUTENTICACAO-PROPRIA.md](../02-arquitetura/decisoes/AUTENTICACAO-PROPRIA.md)
+  Versão: 0.1
+  Status: Aprovado
+  Finalidade: formalizar autenticação própria, credenciais, sessões, rate limiting e contexto autenticado.
 
 ### Recurso auxiliar
 
@@ -99,4 +105,4 @@ Esses itens permanecem previstos na estrutura documental e não devem ser tratad
 
 Este índice reflete a documentação controlada vigente do Cartevy CRM.
 
-A versão 0.3, de 23/09/2026, reflete as versões aprovadas de GOV-002, GOV-003, PRD-002, PRD-003, PRD-004 e ARC-001 no fechamento documental da Fase 3 — Persistência e domínio.
+A versão 0.3 permanece vigente. Em 24/09/2026, o índice foi sincronizado operacionalmente para refletir PRD-004 v0.9, ARC-001 v0.5 e ADR-003 v0.1 no fechamento documental da Fase 4 — Autenticação.

@@ -1,10 +1,10 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.8
+**Versão:** 0.9
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 23/09/2026
+**Última atualização:** 24/09/2026
 
 ---
 
@@ -16,42 +16,37 @@ Ele não substitui os requisitos detalhados e deve ser usado como referência de
 
 ## 2. Estado atual
 
-O projeto concluiu a **Fase 3 — Persistência e domínio**.
+O projeto concluiu a **Fase 4 — Autenticação**.
 
-A persistência foi revisada a partir de pedidos reais da operação e validada contra o PostgreSQL gerenciado pelo Supabase.
+A etapa introduziu autenticação própria integrada ao domínio existente do Cartevy CRM e validou o fluxo contra o PostgreSQL utilizado pelo projeto.
 
-A Fase 3 entregou:
+A Fase 4 entregou:
 
-- PostgreSQL gerenciado pelo Supabase;
-- Prisma 7;
-- conexão TLS validada com CA oficial do Supabase;
-- cinco migrations aplicadas e versionadas;
-- `Organization`;
-- `AppUser`;
-- `Customer`;
-- `Order`;
-- `OrderItem`;
-- `FollowUp`;
-- `Backorder`;
-- pedidos com ou sem cliente formalmente cadastrado;
-- snapshot do nome apresentado no pedido;
-- código interno obrigatório para `Customer`;
-- ausência de associação automática por nome;
-- enriquecimento apenas de campos vazios;
-- preservação de valores já existentes;
-- gravação transacional de pedido e itens;
-- prevenção de duplicidade de pedido confirmado;
-- isolamento por organização;
-- foreign keys compostas;
-- RLS habilitado;
-- seed controlado;
-- testes de domínio;
-- teste real de persistência contra o Supabase;
-- integração contínua e proteção da branch `main`.
+- autenticação própria server-side;
+- credencial separada de `AppUser`;
+- username canônico;
+- proteção de senha com HMAC-SHA256 e Argon2id;
+- sessões persistidas no PostgreSQL;
+- token bruto restrito ao servidor e ao cookie;
+- persistência somente do hash do token;
+- cookies seguros de sessão;
+- expiração por inatividade e duração absoluta;
+- login e logout;
+- proteção das áreas internas;
+- contexto autenticado com `appUserId` e `organizationId`;
+- rate limiting persistente por username e IP confiável;
+- eventos estruturados de segurança;
+- bootstrap controlado do primeiro usuário;
+- cleanup controlado de sessões e buckets;
+- headers de segurança e Content Security Policy;
+- nova migration de autenticação;
+- testes unitários e de política;
+- teste real de persistência da autenticação;
+- formalização arquitetural por `ADR-003 — Autenticação Própria da Aplicação`.
 
-A autenticação permanece fora da Fase 3.
+A autenticação estabelece a identidade necessária para as próximas operações comerciais, mas não implementa administração completa de usuários, níveis de permissão ou policies RLS baseadas diretamente na sessão do Cartevy.
 
-A próxima etapa é a **Fase 4 — Autenticação**.
+A próxima etapa é a **Fase 5 — Núcleo comercial**.
 ## 3. Fases do projeto
 
 ### Fase 0 — Fundação documental
@@ -150,9 +145,10 @@ Entregas concluídas:
 - testes reais de persistência e isolamento.
 
 A Fase 3 não inclui autenticação, policies RLS baseadas em identidade, CRUD comercial completo, monitor Python, bot do Telegram ou geração automática de follow-ups.
+
 ### Fase 4 — Autenticação
 
-**Status:** próxima
+**Status:** concluída
 
 Objetivo:
 
@@ -161,9 +157,32 @@ Objetivo:
 - implementar autorização coerente com a separação por organização;
 - preparar a aplicação para evolução de uso individual para uso compartilhado.
 
+Entregas concluídas:
+
+- autenticação própria integrada a `AppUser`;
+- credenciais próprias com username;
+- proteção de senha com Argon2id e pepper server-side;
+- sessões persistidas e revogáveis;
+- cookies seguros de sessão;
+- login e logout;
+- proteção das rotas internas;
+- contexto autenticado derivado do servidor;
+- organização derivada do usuário persistido;
+- rate limiting persistente;
+- eventos de segurança;
+- bootstrap controlado;
+- cleanup operacional;
+- segurança HTTP e CSP;
+- migration `20260924_authentication_foundation`;
+- testes automatizados;
+- validação real contra PostgreSQL;
+- `ADR-003 — Autenticação Própria da Aplicação`.
+
+A Fase 4 não inclui administração completa de múltiplos usuários, níveis de acesso, recuperação automática de senha, MFA ou policies RLS baseadas diretamente na sessão do Cartevy.
+
 ### Fase 5 — Núcleo comercial
 
-**Status:** Aprovado
+**Status:** próxima
 
 Objetivo:
 
@@ -245,14 +264,18 @@ A modelagem atual já prepara associações por organização e responsável, ma
 
 ## 6. Estado do documento
 
-A versão 0.8 registra a conclusão da **Fase 3 — Persistência e domínio**.
+A versão 0.9 registra a conclusão da **Fase 4 — Autenticação**.
 
-A etapa foi encerrada após revisão do modelo com pedidos reais, aplicação de cinco migrations, implementação da camada transacional de persistência e validação contra o PostgreSQL real.
+A etapa foi encerrada após implementação da autenticação própria, persistência de sessões, proteção das áreas internas, rate limiting, eventos de segurança, nova migration, testes automatizados, validação contra o PostgreSQL real e formalização da decisão em ADR-003.
 
-Também passa a constar como direção aprovada para a futura ingestão:
+A base de autenticação passa a fornecer identidade server-side e `organizationId` para as operações comerciais seguintes.
+
+Policies RLS baseadas diretamente na sessão do Cartevy, administração completa de usuários e níveis avançados de permissão permanecem fora da implementação atual.
+
+O fluxo futuro aprovado de ingestão permanece:
 
 `pasta local → monitor Python → staging temporário → Telegram → validação → PostgreSQL oficial → Cartevy CRM`.
 
 Monitor local, staging e Telegram ainda não estão implementados.
 
-A **Fase 4 — Autenticação** passa a ser a próxima etapa.
+A **Fase 5 — Núcleo comercial** passa a ser a próxima etapa.

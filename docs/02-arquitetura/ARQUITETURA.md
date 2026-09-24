@@ -1,10 +1,10 @@
 # Arquitetura da Aplicação
 
 **Documento:** ARC-001 — Arquitetura da Aplicação
-**Versão:** 0.4
+**Versão:** 0.5
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 23/09/2026
+**Última atualização:** 24/09/2026
 
 ---
 
@@ -22,6 +22,8 @@ A fundação técnica está formalizada em `ADR-001 — Fundação Técnica Inic
 
 A persistência está formalizada em `ADR-002 — Persistência PostgreSQL Gerenciada pelo Supabase`.
 
+A autenticação está formalizada em `ADR-003 — Autenticação Própria da Aplicação`.
+
 A arquitetura atualmente adotada utiliza:
 
 - Next.js com App Router;
@@ -35,11 +37,15 @@ A arquitetura atualmente adotada utiliza:
 - `@prisma/adapter-pg`;
 - Zod para validação de entrada;
 - Vitest para testes;
+- autenticação própria server-side;
+- sessões persistidas no PostgreSQL;
+- Argon2id com pepper server-side;
+- cookies seguros de sessão;
+- rate limiting persistente;
+- contexto autenticado por usuário e organização;
 - GitHub Actions para integração contínua.
 
-A autenticação ainda não foi formalizada nem implementada e permanece como decisão posterior.
-
-Hospedagem da aplicação e infraestrutura definitiva de execução também permanecem pendentes.
+Hospedagem da aplicação e infraestrutura definitiva de execução permanecem pendentes.
 
 ## 3. Escopo arquitetural
 
@@ -180,13 +186,49 @@ RLS está habilitado em:
 - `backorders`;
 - `_prisma_migrations`.
 
-Ainda não existem policies de acesso baseadas em identidade.
+Ainda não existem policies de acesso baseadas diretamente na identidade da sessão do Cartevy.
 
-Isso é intencional enquanto a Fase 4 — Autenticação não estiver implementada.
+A autenticação própria não transforma a sessão da aplicação em identidade da Data API do Supabase.
 
-O acesso Prisma atual utiliza credencial de servidor. RLS não substitui o isolamento server-side por organização, aplicado explicitamente nas operações de persistência. A autorização baseada em identidade permanece para a Fase 4.
+O acesso Prisma utiliza credencial de servidor com capacidade privilegiada. Portanto, RLS não substitui o isolamento e a autorização server-side.
 
-### 4.6 Automação externa
+As operações comerciais deverão utilizar explicitamente o `organizationId` derivado do `AuthContext`.
+
+Eventual adoção futura de policies baseadas em identidade exigirá mecanismo compatível e decisão arquitetural própria.
+
+### 4.6 Autenticação e identidade
+
+A autenticação própria está implementada na camada server-side e formalizada em `ADR-003 — Autenticação Própria da Aplicação`.
+
+A identidade utiliza:
+
+- `AppUser` como usuário da aplicação;
+- `AuthCredential` como credencial própria;
+- username canônico para login;
+- senha protegida por HMAC-SHA256 e Argon2id;
+- sessões persistidas no PostgreSQL;
+- token bruto restrito ao servidor e ao cookie;
+- persistência somente do hash do token;
+- cookies `HttpOnly`, `SameSite=Strict` e `Secure` fora de desenvolvimento;
+- rate limiting persistente;
+- eventos estruturados de segurança.
+
+O contexto autenticado server-side fornece:
+
+- `sessionId`;
+- `appUserId`;
+- `organizationId`;
+- `name`.
+
+A organização é derivada do `AppUser` persistido e não de parâmetros fornecidos pelo cliente.
+
+As áreas internas exigem contexto autenticado.
+
+Essa proteção de rota não substitui autorização nas operações de dados. Services, Server Actions e consultas comerciais deverão utilizar explicitamente o `organizationId` proveniente do contexto autenticado.
+
+A implementação atual não inclui administração completa de múltiplos usuários, níveis de permissão, recuperação automática de senha, MFA ou policies RLS baseadas diretamente na sessão do Cartevy.
+
+### 4.7 Automação externa
 
 O fluxo aprovado para fases futuras é:
 
@@ -220,7 +262,7 @@ As regras desse fluxo são:
 - deve ser aplicado o princípio de menor privilégio;
 - não deve ser colocada chave poderosa, como service-role, no computador da loja.
 
-### 4.7 PDF e dados estruturados
+### 4.8 PDF e dados estruturados
 
 O arquivo PDF não é considerado repositório definitivo do sistema.
 
@@ -245,17 +287,30 @@ Não integram os dados a persistir da extração: pagamento, endereço, e-mail, 
 
 ## 5. Migrations e estado do banco
 
-A persistência possui cinco migrations aplicadas e versionadas:
+A persistência possui seis migrations aplicadas e versionadas:
 
 1. `20260923_initial_domain`;
 2. `20260923_harden_persistence`;
 3. `20260923_refine_crm_domain`;
 4. `20260923_support_unregistered_customer_orders`;
-5. `20260923_enforce_registered_customer_identity`.
+5. `20260923_enforce_registered_customer_identity`;
+6. `20260924_authentication_foundation`.
 
-A primeira estabelece o domínio relacional, constraints e RLS das tabelas de aplicação.
+As cinco primeiras consolidam a fundação do domínio comercial e sua integridade.
 
-A segunda habilita RLS na tabela interna de migrations do Prisma e adiciona índices de suporte às foreign keys compostas identificadas pelos advisors do Supabase.
+A migration `20260924_authentication_foundation` acrescenta:
+
+- credenciais próprias;
+- sessões;
+- buckets persistentes de rate limit;
+- eventos de segurança;
+- constraints e índices de autenticação;
+- foreign keys;
+- RLS nas tabelas de autenticação.
+
+Ela também remove a referência legada `auth_user_id` de `app_users` e torna o e-mail cadastral opcional.
+
+As seis migrations foram aplicadas e validadas contra o PostgreSQL utilizado pelo projeto.
 
 Migrations já aplicadas são imutáveis. Mudanças futuras no schema deverão ocorrer por novas migrations versionadas. Alterações manuais no banco remoto devem ser evitadas para preservar rastreabilidade.
 
@@ -279,11 +334,14 @@ O CI não utiliza credenciais reais de banco e não executa migrations remotas.
 
 ## 7. Restrições e decisões pendentes
 
-Continuam fora da Fase 3 e permanecem pendentes de definição ou implementação:
+Após a conclusão da Fase 4, permanecem pendentes de definição ou implementação:
 
-- autenticação;
-- autorização associada à identidade autenticada;
-- policies RLS baseadas em usuário;
+- autorização específica de cada operação comercial;
+- policies RLS baseadas diretamente na sessão do Cartevy;
+- administração completa de múltiplos usuários;
+- diferentes níveis de permissão;
+- recuperação automática de senha;
+- MFA;
 - CRUD comercial completo;
 - geração automática de follow-up;
 - definição da cadência dos follow-ups;
@@ -297,7 +355,7 @@ Continuam fora da Fase 3 e permanecem pendentes de definição ou implementaçã
 - integrações condicionadas;
 - deploy/estabilização de produção.
 
-A próxima fase é a Fase 4 — Autenticação.
+A próxima fase é a Fase 5 — Núcleo comercial.
 
 ## 8. Princípios arquiteturais
 
@@ -315,12 +373,34 @@ A próxima fase é a Fase 4 — Autenticação.
 
 ## 9. Estado do documento
 
-A versão 0.4 representa a arquitetura ao final da Fase 3 — Persistência e domínio, concluída.
+A versão 0.5 representa a arquitetura ao final da Fase 4 — Autenticação, concluída.
 
-PostgreSQL gerenciado pelo Supabase e Prisma 7 passam a integrar a arquitetura oficial, conforme ADR-002.
+PostgreSQL gerenciado pelo Supabase e Prisma 7 permanecem como fundação de persistência conforme ADR-002.
 
-A modelagem de domínio com clientes formalmente cadastrados e pedidos com ou sem cliente vinculado, as cinco migrations, constraints, RLS, repositories, services, persistência transacional e testes de domínio e persistência fazem parte do estado arquitetural conhecido, assim como a integração contínua e a proteção da branch `main`.
+A autenticação própria passa a integrar a arquitetura oficial conforme ADR-003.
 
-Autenticação, autorização completa, policies de identidade, hospedagem e demais componentes futuros continuam pendentes de decisões e implementação próprias.
+O estado arquitetural conhecido inclui:
 
-A próxima fase é a Fase 4 — Autenticação. O fluxo de ingestão com monitor Python, staging temporário e Telegram permanece como direção aprovada para fases futuras.
+- domínio comercial persistido;
+- seis migrations aplicadas;
+- constraints e RLS;
+- repositories e services;
+- persistência transacional;
+- autenticação própria server-side;
+- credenciais protegidas com Argon2id e pepper;
+- sessões persistidas e revogáveis;
+- cookies seguros;
+- rate limiting persistente;
+- eventos de segurança;
+- contexto autenticado contendo `appUserId` e `organizationId`;
+- proteção das áreas internas;
+- integração contínua;
+- proteção da branch `main`.
+
+A autorização específica das operações comerciais deverá ser aplicada na Fase 5 utilizando a identidade e a organização provenientes do contexto autenticado.
+
+Policies RLS baseadas diretamente na sessão do Cartevy, administração completa de usuários, hospedagem e infraestrutura definitiva permanecem pendentes de decisões ou implementação próprias.
+
+A próxima fase é a Fase 5 — Núcleo comercial.
+
+O fluxo de ingestão com monitor Python, staging temporário e Telegram permanece como direção aprovada para fases futuras.
