@@ -68,6 +68,16 @@ export async function verifyPassword(
   }
   if (!validatePassword(password)) return false;
 
+  return verifyPasswordWork(password, encodedHash, pepper);
+}
+
+// Bounded crypto work without password-policy short-circuiting, also used by dummy
+// verification. This is not an authentication decision; callers enforce policy.
+export async function verifyPasswordWork(password: string, encodedHash: string, pepper: string): Promise<boolean> {
+  assertPepper(pepper);
+  if (password.length > PASSWORD_MAX_LENGTH * 2) throw new InvalidPasswordError();
+  if (!encodedHash.startsWith("$argon2id$")) throw new AuthCryptoError("Stored password hash is not Argon2id.");
+
   try {
     return await argon2.verify(encodedHash, prehash(password, pepper));
   } catch {
