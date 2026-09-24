@@ -88,10 +88,24 @@ A finalidade é manter rastreabilidade sobre documentos aprovados, consolidaçõ
 - manutenção do RLS sem policies baseadas diretamente na sessão do Cartevy, preservando autorização e isolamento explícitos na camada server-side;
 - sincronização operacional do GOV-002 v0.3 e deste GOV-003 v0.3.
 
+#### Início da Fase 5 — Núcleo comercial
+
+- início formal da Fase 5 — Núcleo comercial;
+- aprovação do PRD-004 v0.10;
+- aprovação do ARC-001 v0.6;
+- organização da Fase 5 nas subetapas 5.0 a 5.6;
+- definição de gates internos para Clientes, Pedidos, Follow-ups, Encomendas, Dashboard e fechamento da fase;
+- definição de `AuthContext` server-side como origem de `organizationId` e, quando aplicável, `appUserId` nas operações comerciais;
+- manutenção do isolamento explícito por organização na camada server-side;
+- preservação dos estados persistidos `PENDING` e `COMPLETED` para follow-ups, com situações operacionais derivadas pela regra de domínio;
+- manutenção de `Order` como referência comercial das encomendas nesta etapa;
+- manutenção de monitor Python, staging e Telegram fora da Fase 5;
+- atualização do README para refletir o Núcleo comercial como em andamento;
+- sincronização operacional do GOV-002 v0.3 e deste GOV-003 v0.3.
 ## 3. Estado do documento
 
 Este changelog representa a linha de registro documental disponível para o projeto.
 
 Novas mudanças relevantes devem ser incluídas aqui somente quando houver alteração documental efetiva, aprovada e rastreável.
 
-A versão 0.3 permanece vigente. Em 24/09/2026, o documento recebeu atualização operacional para registrar o fechamento documental da Fase 4 — Autenticação, preservando os registros históricos anteriores.
+A versão 0.3 permanece vigente. Em 24/09/2026, o documento recebeu atualização operacional adicional para registrar o início documentado da Fase 5 — Núcleo comercial, preservando o fechamento da Fase 4 e os registros históricos anteriores.
