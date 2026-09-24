@@ -4,7 +4,7 @@
 **Versão:** 0.3
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 23/09/2026
+**Última atualização:** 24/09/2026
 
 ---
 
@@ -66,10 +66,32 @@ A finalidade é manter rastreabilidade sobre documentos aprovados, consolidaçõ
 - manutenção do RLS habilitado, com policies baseadas em identidade pendentes de autenticação/autorização, e da preparação multi-tenant como fronteira técnica futura, sem funcionalidade multiempresa disponível;
 - atualização do README e aprovação do GOV-002 v0.3 e do GOV-003 v0.3 para consolidar o fechamento documental.
 
+### 24/09/2026
+
+#### Fechamento da Fase 4 — Autenticação
+
+- conclusão formal da Fase 4 — Autenticação e definição da Fase 5 — Núcleo comercial como próxima etapa;
+- aprovação do PRD-004 v0.9;
+- aprovação do ARC-001 v0.5;
+- criação e aprovação do ADR-003 v0.1 — Autenticação Própria da Aplicação;
+- implementação de autenticação própria integrada a `AppUser`;
+- adoção de credenciais com username, HMAC-SHA256, pepper server-side e Argon2id;
+- implementação de sessões persistidas e revogáveis, com token bruto restrito ao servidor/cookie e persistência somente de seu hash;
+- implementação de login, logout e proteção das áreas internas;
+- implementação de `AuthContext` server-side com `appUserId` e `organizationId`;
+- implementação de rate limiting persistente por username e, quando confiável, por IP;
+- registro estruturado de eventos de segurança;
+- bootstrap controlado do primeiro usuário e cleanup operacional;
+- implementação de headers de segurança e Content Security Policy;
+- aplicação e validação da migration `20260924_authentication_foundation`;
+- validação real da persistência de autenticação contra PostgreSQL;
+- manutenção do RLS sem policies baseadas diretamente na sessão do Cartevy, preservando autorização e isolamento explícitos na camada server-side;
+- sincronização operacional do GOV-002 v0.3 e deste GOV-003 v0.3.
+
 ## 3. Estado do documento
 
 Este changelog representa a linha de registro documental disponível para o projeto.
 
 Novas mudanças relevantes devem ser incluídas aqui somente quando houver alteração documental efetiva, aprovada e rastreável.
 
-A versão 0.3, de 23/09/2026, consolida o fechamento documental da Fase 3 — Persistência e domínio e preserva os registros históricos anteriores.
+A versão 0.3 permanece vigente. Em 24/09/2026, o documento recebeu atualização operacional para registrar o fechamento documental da Fase 4 — Autenticação, preservando os registros históricos anteriores.
