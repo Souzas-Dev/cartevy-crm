@@ -47,6 +47,7 @@ jobs:
       DATABASE_URL: "postgresql://cartevy:cartevy@127.0.0.1:5432/cartevy_ci"
       DIRECT_URL: "postgresql://cartevy:cartevy@127.0.0.1:5432/cartevy_ci"
       DATABASE_SSL_MODE: "disable"
+      CARTEVY_ALLOW_LEGACY_MIGRATION_BOOTSTRAP: "1"
       CARTEVY_ALLOW_AUTH_INTEGRATION: "1"
 
     steps:
@@ -78,7 +79,7 @@ jobs:
         run: npm run prisma:generate
 
       - name: Bootstrap legacy migration history
-        run: npm run prisma:ci:bootstrap-legacy
+        run: npm run prisma:bootstrap-legacy
 
       - name: Apply pending migrations
         run: npm run prisma:migrate:deploy

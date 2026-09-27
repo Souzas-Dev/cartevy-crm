@@ -4,6 +4,10 @@ import { join } from "node:path";
 
 import { Client } from "pg";
 
+import {
+  resolveDatabaseSslConfig,
+} from "../src/lib/db/create-prisma-client";
+
 const legacyMigrations = [
   "20260923_initial_domain",
   "20260923_harden_persistence",
@@ -13,10 +17,21 @@ const legacyMigrations = [
   "20260924_authentication_foundation",
 ] as const;
 
-function requireDisposableCiDatabase(): string {
-  if (process.env.CI !== "true") {
+
+function requireExplicitBootstrap(): string {
+  if (
+    process.env
+      .CARTEVY_ALLOW_LEGACY_MIGRATION_BOOTSTRAP !==
+    "1"
+  ) {
     throw new Error(
-      "O bootstrap legado só pode executar no CI.",
+      "Bootstrap legado bloqueado: defina CARTEVY_ALLOW_LEGACY_MIGRATION_BOOTSTRAP=1 explicitamente.",
+    );
+  }
+
+  if (process.argv.length !== 2) {
+    throw new Error(
+      "Não passe argumentos ao bootstrap legado.",
     );
   }
 
@@ -28,25 +43,19 @@ function requireDisposableCiDatabase(): string {
     );
   }
 
-  const host = new URL(connectionString).hostname;
-
-  if (
-    host !== "127.0.0.1" &&
-    host !== "localhost"
-  ) {
-    throw new Error(
-      "O bootstrap legado exige PostgreSQL local descartável.",
-    );
-  }
-
   return connectionString;
 }
 
 function markMigrationApplied(
   migrationName: string,
 ): void {
+  const command =
+    process.platform === "win32"
+      ? "npx.cmd"
+      : "npx";
+
   const result = spawnSync(
-    "npx",
+    command,
     [
       "prisma",
       "migrate",
@@ -72,39 +81,64 @@ function markMigrationApplied(
   }
 }
 
+async function assertPublicSchemaIsEmpty(
+  client: Client,
+): Promise<void> {
+  const state = await client.query<{
+    relationCount: number;
+    enumCount: number;
+  }>(
+    `
+      SELECT
+        (
+          SELECT count(*)::int
+          FROM pg_class AS c
+          INNER JOIN pg_namespace AS n
+            ON n.oid = c.relnamespace
+          WHERE
+            n.nspname = 'public'
+            AND c.relkind IN ('r', 'p', 'v', 'm', 'S', 'f')
+        ) AS "relationCount",
+        (
+          SELECT count(*)::int
+          FROM pg_type AS t
+          INNER JOIN pg_namespace AS n
+            ON n.oid = t.typnamespace
+          WHERE
+            n.nspname = 'public'
+            AND t.typtype = 'e'
+        ) AS "enumCount"
+    `,
+  );
+
+  const row = state.rows[0];
+
+  if (
+    !row ||
+    row.relationCount > 0 ||
+    row.enumCount > 0
+  ) {
+    throw new Error(
+      "O bootstrap legado exige o schema public vazio.",
+    );
+  }
+}
+
 async function main(): Promise<void> {
   const connectionString =
-    requireDisposableCiDatabase();
+    requireExplicitBootstrap();
 
   const client = new Client({
     connectionString,
-    ssl: false,
+    ssl: resolveDatabaseSslConfig(
+      connectionString,
+    ),
   });
 
   await client.connect();
 
   try {
-    const existing = await client.query<{
-      organizations: string | null;
-      migrationHistory: string | null;
-    }>(
-      `
-        SELECT
-          to_regclass('public.organizations')::text AS "organizations",
-          to_regclass('public._prisma_migrations')::text AS "migrationHistory"
-      `,
-    );
-
-    const state = existing.rows[0];
-
-    if (
-      state?.organizations ||
-      state?.migrationHistory
-    ) {
-      throw new Error(
-        "O bootstrap legado exige um banco vazio.",
-      );
-    }
+    await assertPublicSchemaIsEmpty(client);
 
     for (const migrationName of legacyMigrations) {
       const migrationPath = join(

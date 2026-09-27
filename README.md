@@ -144,6 +144,8 @@ Existem exatamente seis migrations aplicadas:
 
 Migrations aplicadas são imutáveis; alterações futuras devem ocorrer por novas migrations versionadas.
 
+As migrations de 23/09 compartilham o mesmo prefixo de data e seus nomes não reproduzem a ordem histórica correta quando o Prisma parte de um banco vazio. Elas não devem ser renomeadas nem editadas. Para inicializar **um banco intencionalmente vazio**, defina `CARTEVY_ALLOW_LEGACY_MIGRATION_BOOTSTRAP=1`, execute `npm run prisma:bootstrap-legacy` e depois `npm run prisma:migrate:deploy`. O bootstrap recusa bancos que já contenham o schema conhecido do Cartevy; não o utilize em bancos existentes.
+
 RLS está habilitado nas tabelas da aplicação e nas tabelas específicas de autenticação.
 
 Não existem policies baseadas diretamente na sessão do Cartevy. A aplicação utiliza autorização server-side e as operações comerciais deverão respeitar explicitamente o `organizationId` derivado do contexto autenticado.
@@ -160,7 +162,12 @@ O workflow `CI` executa, entre outros gates:
 
 - instalação reproduzível com `npm ci`;
 - validação e geração do Prisma Client;
-- testes automatizados;
+- PostgreSQL 17 efêmero;
+- reconstrução controlada do histórico legado de migrations;
+- `prisma migrate deploy` para migrations pendentes;
+- verificação de drift entre PostgreSQL e `schema.prisma`;
+- testes unitários;
+- testes reais de persistência do domínio comercial e da autenticação;
 - ESLint;
 - build de produção;
 - auditoria de dependências de produção com bloqueio para vulnerabilidades críticas.
