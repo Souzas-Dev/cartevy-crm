@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",
-    "prisma:ci:bootstrap-legacy": "tsx scripts/ci-bootstrap-legacy-migrations.ts",
+    "prisma:bootstrap-legacy": "tsx scripts/bootstrap-legacy-migrations.ts",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:diff:check": "prisma migrate diff --exit-code --from-config-datasource --to-schema prisma/schema.prisma",
     "test": "vitest run",
