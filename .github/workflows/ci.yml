@@ -20,7 +20,22 @@ jobs:
   quality:
     name: Quality
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: cartevy
+          POSTGRES_PASSWORD: cartevy
+          POSTGRES_DB: cartevy_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U cartevy -d cartevy_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     defaults:
       run:
@@ -29,12 +44,10 @@ jobs:
     env:
       CI: "true"
       NEXT_TELEMETRY_DISABLED: "1"
-
-      # Prisma 7 carrega a datasource durante validate/generate.
-      # Estas URLs são apenas sintáticas no CI.
-      # Nenhuma conexão com banco real é realizada.
-      DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/cartevy"
-      DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/cartevy"
+      DATABASE_URL: "postgresql://cartevy:cartevy@127.0.0.1:5432/cartevy_ci"
+      DIRECT_URL: "postgresql://cartevy:cartevy@127.0.0.1:5432/cartevy_ci"
+      DATABASE_SSL_MODE: "disable"
+      CARTEVY_ALLOW_AUTH_INTEGRATION: "1"
 
     steps:
       - name: Checkout
@@ -59,13 +72,19 @@ jobs:
         run: npm ci
 
       - name: Validate Prisma schema
-        run: npm run prisma:validate --if-present
+        run: npm run prisma:validate
 
       - name: Generate Prisma Client
-        run: npm run prisma:generate --if-present
+        run: npm run prisma:generate
 
-      - name: Run tests
-        run: npm test --if-present
+      - name: Apply database migrations
+        run: npm run prisma:migrate:deploy
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Run PostgreSQL integration tests
+        run: npm run test:integration
 
       - name: Lint
         run: npm run lint
