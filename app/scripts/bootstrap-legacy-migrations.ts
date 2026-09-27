@@ -17,29 +17,6 @@ const legacyMigrations = [
   "20260924_authentication_foundation",
 ] as const;
 
-const knownRelations = [
-  "_prisma_migrations",
-  "organizations",
-  "app_users",
-  "customers",
-  "orders",
-  "order_items",
-  "follow_ups",
-  "backorders",
-  "auth_credentials",
-  "auth_sessions",
-  "auth_rate_limit_buckets",
-  "auth_security_events",
-] as const;
-
-const knownEnumTypes = [
-  "AppUserStatus",
-  "OrderOrigin",
-  "FollowUpStatus",
-  "BackorderStatus",
-  "AuthRateLimitScope",
-  "AuthSecurityEventType",
-] as const;
 
 function requireExplicitBootstrap(): string {
   if (
@@ -104,7 +81,7 @@ function markMigrationApplied(
   }
 }
 
-async function assertDatabaseIsEmpty(
+async function assertPublicSchemaIsEmpty(
   client: Client,
 ): Promise<void> {
   const state = await client.query<{
@@ -120,7 +97,7 @@ async function assertDatabaseIsEmpty(
             ON n.oid = c.relnamespace
           WHERE
             n.nspname = 'public'
-            AND c.relname = ANY($1::text[])
+            AND c.relkind IN ('r', 'p', 'v', 'm', 'S', 'f')
         ) AS "relationCount",
         (
           SELECT count(*)::int
@@ -129,13 +106,9 @@ async function assertDatabaseIsEmpty(
             ON n.oid = t.typnamespace
           WHERE
             n.nspname = 'public'
-            AND t.typname = ANY($2::text[])
+            AND t.typtype = 'e'
         ) AS "enumCount"
     `,
-    [
-      [...knownRelations],
-      [...knownEnumTypes],
-    ],
   );
 
   const row = state.rows[0];
@@ -146,7 +119,7 @@ async function assertDatabaseIsEmpty(
     row.enumCount > 0
   ) {
     throw new Error(
-      "O bootstrap legado exige um banco sem schema conhecido do Cartevy.",
+      "O bootstrap legado exige o schema public vazio.",
     );
   }
 }
@@ -165,7 +138,7 @@ async function main(): Promise<void> {
   await client.connect();
 
   try {
-    await assertDatabaseIsEmpty(client);
+    await assertPublicSchemaIsEmpty(client);
 
     for (const migrationName of legacyMigrations) {
       const migrationPath = join(
