@@ -24,6 +24,11 @@ const editableText = (max: number) =>
     .nullable()
     .optional();
 
+const blankToUndefined = (value: unknown) =>
+  typeof value === "string" && value.trim() === ""
+    ? undefined
+    : value;
+
 export const organizationInputSchema = z.object({
   name: z.string().trim().min(2).max(160),
   slug: z
@@ -96,6 +101,34 @@ export const importedCustomerSchema = z
   })
   .strict();
 
+export const customerCreateSchema = z
+  .object({
+    internalCode: z
+      .string()
+      .transform(normalizeInternalCode)
+      .pipe(
+        z
+          .string()
+          .min(1, "Código interno é obrigatório.")
+          .max(80),
+      ),
+    name: z
+      .string()
+      .trim()
+      .min(1, "Nome é obrigatório.")
+      .max(200),
+    document: z.preprocess(
+      blankToUndefined,
+      documentSchema.optional(),
+    ),
+    whatsapp: z.preprocess(
+      blankToUndefined,
+      whatsappSchema.optional(),
+    ),
+    observations: optionalTrimmedText(5000),
+  })
+  .strict();
+
 export const customerImportInputSchema =
   importedCustomerSchema.extend({
     organizationId: z.string().uuid(),
@@ -156,6 +189,9 @@ export const confirmedOrderImportSchema = z
 
 export type ConfirmedOrderImportInput =
   z.input<typeof confirmedOrderImportSchema>;
+
+export type CustomerCreateInput =
+  z.input<typeof customerCreateSchema>;
 
 export type CustomerContactUpdateInput =
   z.input<typeof customerContactUpdateSchema>;

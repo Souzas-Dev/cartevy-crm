@@ -9,6 +9,7 @@ import {
 
 import {
   findCustomerById,
+  updateCustomerContactFields,
 } from "../persistence/customer-repository";
 import {
   CustomerNotFoundError,
@@ -34,14 +35,11 @@ export async function updateCustomerContact(
     throw new CustomerNotFoundError();
   }
 
-  return prisma.customer.update({
-    where: {
-      id_organizationId: {
-        id: customerId,
-        organizationId,
-      },
-    },
-    data: {
+  return updateCustomerContactFields(
+    prisma,
+    organizationId,
+    customerId,
+    {
       ...(data.whatsapp !== undefined
         ? { whatsapp: data.whatsapp }
         : {}),
@@ -49,5 +47,5 @@ export async function updateCustomerContact(
         ? { observations: data.observations }
         : {}),
     },
-  });
+  );
 }
