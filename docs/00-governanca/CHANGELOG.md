@@ -4,7 +4,7 @@
 **Versão:** 0.3
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 24/09/2026
+**Última atualização:** 27/09/2026
 
 ---
 
@@ -102,10 +102,25 @@ A finalidade é manter rastreabilidade sobre documentos aprovados, consolidaçõ
 - manutenção de monitor Python, staging e Telegram fora da Fase 5;
 - atualização do README para refletir o Núcleo comercial como em andamento;
 - sincronização operacional do GOV-002 v0.3 e deste GOV-003 v0.3.
+
+### 27/09/2026
+
+#### Avanço inicial da Fase 5 — Núcleo comercial
+
+- aprovação do PRD-004 v0.11, sincronizando o roadmap com as primeiras entregas funcionais incrementais do módulo de Clientes;
+- registro da primeira vertical slice de Clientes com listagem server-side, cadastro manual, atualização controlada de WhatsApp e observações e isolamento explícito por organização;
+- registro de `organizationId` e `appUserId` derivados do contexto autenticado quando aplicável às operações comerciais;
+- registro de testes unitários e teste real de persistência de Clientes contra PostgreSQL, incluindo isolamento entre organizações e regras de unicidade;
+- manutenção do Gate 5.1 como aberto para busca, paginação, detalhe do cliente e históricos de pedidos e follow-ups;
+- sincronização do README com o estado real do módulo de Clientes, o template de Pull Request e a regra atual do bootstrap legado de migrations;
+- atualização da documentação do bootstrap legado para registrar a exigência de schema `public` vazio;
+- sincronização operacional do GOV-002 v0.3 para refletir PRD-004 v0.11;
+- sincronização operacional deste GOV-003 v0.3 conforme a seção 9.1 do GOV-001.
+
 ## 3. Estado do documento
 
 Este changelog representa a linha de registro documental disponível para o projeto.
 
 Novas mudanças relevantes devem ser incluídas aqui somente quando houver alteração documental efetiva, aprovada e rastreável.
 
-A versão 0.3 permanece vigente. Em 24/09/2026, o documento recebeu atualização operacional adicional para registrar o início documentado da Fase 5 — Núcleo comercial, preservando o fechamento da Fase 4 e os registros históricos anteriores.
+A versão 0.3 permanece vigente. Em 27/09/2026, o documento recebeu atualização operacional para registrar o avanço inicial da Fase 5 — Núcleo comercial, a aprovação do PRD-004 v0.11 e a sincronização documental correspondente, preservando os registros históricos anteriores.

@@ -12,7 +12,7 @@ A proposta principal é centralizar informações da rotina comercial, preservar
 
 ## Estado atual
 
-As **Fases 0, 1, 2, 3 e 4 estão concluídas**. A **Fase 5 — Núcleo comercial está em andamento**, iniciada pelo planejamento técnico e pela execução incremental dos módulos comerciais.
+As **Fases 0, 1, 2, 3 e 4 estão concluídas**. A **Fase 5 — Núcleo comercial está em andamento** e já possui uma primeira vertical slice do módulo de Clientes implementada.
 
 Já estão concluídas:
 
@@ -40,9 +40,11 @@ Já estão concluídas:
 - segurança HTTP e Content Security Policy;
 - teste real de persistência da autenticação;
 - CI com GitHub Actions;
-- proteção da branch `main` com Pull Request e check `Quality` obrigatórios.
+- proteção da branch `main` com Pull Request e check `Quality` obrigatórios;
+- primeira vertical slice de Clientes com listagem server-side, cadastro manual, edição controlada de WhatsApp e observações e isolamento explícito por organização;
+- teste real de persistência do fluxo de Clientes contra PostgreSQL integrado ao gate `Quality`.
 
-O núcleo comercial completo ainda não está implementado.
+O núcleo comercial completo ainda não está implementado. No módulo de Clientes, o Gate 5.1 permanece aberto para busca, paginação, detalhe e históricos de pedidos e follow-ups.
 
 Monitor Python, staging e Telegram fazem parte do fluxo futuro aprovado e também ainda não estão implementados.
 
@@ -67,6 +69,7 @@ O Cartevy CRM não é um ERP e não cobre faturamento, estoque, logística, fina
 ```text
 cartevy-crm/
 ├── .github/
+│   ├── pull_request_template.md
 │   └── workflows/
 │       └── ci.yml
 ├── app/
@@ -144,7 +147,7 @@ Existem exatamente seis migrations aplicadas:
 
 Migrations aplicadas são imutáveis; alterações futuras devem ocorrer por novas migrations versionadas.
 
-As migrations de 23/09 compartilham o mesmo prefixo de data e seus nomes não reproduzem a ordem histórica correta quando o Prisma parte de um banco vazio. Elas não devem ser renomeadas nem editadas. Para inicializar **um banco intencionalmente vazio**, defina `CARTEVY_ALLOW_LEGACY_MIGRATION_BOOTSTRAP=1`, execute `npm run prisma:bootstrap-legacy` e depois `npm run prisma:migrate:deploy`. O bootstrap recusa bancos que já contenham o schema conhecido do Cartevy; não o utilize em bancos existentes.
+As migrations de 23/09 compartilham o mesmo prefixo de data e seus nomes não reproduzem a ordem histórica correta quando o Prisma parte de um banco vazio. Elas não devem ser renomeadas nem editadas. Para inicializar **um banco intencionalmente vazio**, defina `CARTEVY_ALLOW_LEGACY_MIGRATION_BOOTSTRAP=1`, execute `npm run prisma:bootstrap-legacy` e depois `npm run prisma:migrate:deploy`. O bootstrap exige que o schema `public` esteja vazio e recusa bancos que já contenham relações ou tipos enum nesse schema; não o utilize em bancos existentes.
 
 RLS está habilitado nas tabelas da aplicação e nas tabelas específicas de autenticação.
 
