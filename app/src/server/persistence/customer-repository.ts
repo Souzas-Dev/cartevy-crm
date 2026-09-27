@@ -19,6 +19,33 @@ export interface RegisteredCustomerSource {
   whatsapp?: string;
 }
 
+export interface CustomerCreateRecord {
+  internalCode: string;
+  name: string;
+  document?: string;
+  whatsapp?: string;
+  observations?: string;
+}
+
+export async function listCustomers(
+  db: CustomerDb,
+  organizationId: string,
+): Promise<Customer[]> {
+  return db.customer.findMany({
+    where: {
+      organizationId,
+    },
+    orderBy: [
+      {
+        name: "asc",
+      },
+      {
+        internalCode: "asc",
+      },
+    ],
+  });
+}
+
 export async function findCustomerById(
   db: CustomerDb,
   organizationId: string,
@@ -49,7 +76,7 @@ export async function findCustomerByInternalCode(
   });
 }
 
-async function findCustomerByDocument(
+export async function findCustomerByDocument(
   db: CustomerDb,
   organizationId: string,
   document: string,
@@ -61,6 +88,45 @@ async function findCustomerByDocument(
         document,
       },
     },
+  });
+}
+
+export async function createCustomerRecord(
+  db: CustomerDb,
+  organizationId: string,
+  responsibleUserId: string | null,
+  source: CustomerCreateRecord,
+): Promise<Customer> {
+  return db.customer.create({
+    data: {
+      organizationId,
+      responsibleUserId,
+      internalCode: source.internalCode,
+      name: source.name,
+      document: source.document,
+      whatsapp: source.whatsapp,
+      observations: source.observations,
+    },
+  });
+}
+
+export async function updateCustomerContactFields(
+  db: CustomerDb,
+  organizationId: string,
+  customerId: string,
+  data: {
+    whatsapp?: string | null;
+    observations?: string | null;
+  },
+): Promise<Customer> {
+  return db.customer.update({
+    where: {
+      id_organizationId: {
+        id: customerId,
+        organizationId,
+      },
+    },
+    data,
   });
 }
 
