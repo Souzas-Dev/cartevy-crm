@@ -19,8 +19,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:persistence": "tsx scripts/persistence.integration.ts",
+    "test:customer:persistence": "node --conditions=react-server --import tsx scripts/customer.integration.ts",
     "test:auth:persistence": "node --conditions=react-server --import tsx scripts/auth.integration.ts",
-    "test:integration": "npm run test:persistence && npm run test:auth:persistence",
+    "test:integration": "npm run test:persistence && npm run test:customer:persistence && npm run test:auth:persistence",
     "seed:dev": "tsx scripts/seed-dev.ts",
     "auth:bootstrap": "node --conditions=react-server --import tsx scripts/bootstrap-auth-user.ts",
     "auth:cleanup": "node --conditions=react-server --import tsx scripts/auth-cleanup.ts"
