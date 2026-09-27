@@ -77,8 +77,14 @@ jobs:
       - name: Generate Prisma Client
         run: npm run prisma:generate
 
-      - name: Apply database migrations
+      - name: Bootstrap legacy migration history
+        run: npm run prisma:ci:bootstrap-legacy
+
+      - name: Apply pending migrations
         run: npm run prisma:migrate:deploy
+
+      - name: Verify database schema
+        run: npm run prisma:diff:check
 
       - name: Run unit tests
         run: npm test
