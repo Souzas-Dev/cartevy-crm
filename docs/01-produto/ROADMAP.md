@@ -1,10 +1,10 @@
 # Roadmap do Produto
 
 **Documento:** PRD-004 — Roadmap do Produto
-**Versão:** 0.10
+**Versão:** 0.11
 **Status:** Aprovado
 **Responsável:** Eduardo Souza
-**Última atualização:** 24/09/2026
+**Última atualização:** 27/09/2026
 
 ---
 
@@ -48,7 +48,10 @@ A autenticação estabelece a identidade necessária para as próximas operaçõ
 
 A **Fase 5 — Núcleo comercial** está em andamento.
 
-Neste marco, a fase foi iniciada pelo planejamento técnico e pela definição da ordem incremental de implementação. Nenhum módulo comercial da Fase 5 é considerado concluído até passar pelos gates técnicos e funcionais definidos neste documento.
+A execução já avançou além do planejamento inicial. O módulo de Clientes possui uma primeira vertical slice implementada, com listagem server-side, cadastro manual, atualização controlada de WhatsApp e observações, identidade operacional derivada do contexto autenticado e isolamento explícito por organização. O fluxo também possui cobertura unitária e teste real de persistência contra PostgreSQL.
+
+O **Gate 5.1 permanece aberto**. Busca, paginação, detalhe do cliente, histórico de pedidos e histórico de follow-ups ainda não foram concluídos. Nenhuma subetapa 5.x é considerada encerrada até atender ao gate correspondente.
+
 ## 3. Fases do projeto
 
 ### Fase 0 — Fundação documental
@@ -223,6 +226,28 @@ Objetivo:
 
 A identidade formal do cliente continuará baseada no código interno da origem. Nome não deverá ser utilizado para associação automática.
 
+Progresso implementado:
+
+- listagem inicial de clientes executada server-side e isolada por organização;
+- cadastro manual sem aceitar `organizationId` como autoridade proveniente do cliente;
+- `organizationId` e `appUserId` derivados do contexto autenticado quando aplicável;
+- atualização controlada de WhatsApp e observações comerciais;
+- atualização de cliente revalidada dentro da organização autenticada;
+- tratamento de conflitos de unicidade sem exposição de detalhes internos;
+- testes unitários para normalização, conflitos e isolamento por organização;
+- teste real de persistência contra PostgreSQL cobrindo cadastro, listagem, atualização cross-tenant e unicidade;
+- testes de integração incluídos no gate `Quality` do CI.
+
+Pendências para o Gate 5.1:
+
+- busca por nome, código interno, documento e WhatsApp;
+- paginação;
+- detalhe dedicado do cliente;
+- histórico de pedidos explicitamente vinculados;
+- histórico de follow-ups relacionados.
+
+O Gate 5.1 permanece aberto até que essas capacidades e as validações aplicáveis sejam concluídas.
+
 #### 5.2 — Pedidos
 
 Objetivo:
@@ -385,7 +410,7 @@ A modelagem atual já prepara associações por organização e responsável, ma
 
 ## 6. Estado do documento
 
-A versão 0.10 registra o início da **Fase 5 — Núcleo comercial** e formaliza sua execução incremental.
+A versão 0.11 registra o avanço inicial da **Fase 5 — Núcleo comercial** e sincroniza o roadmap com as primeiras entregas incrementais do módulo de Clientes.
 
 A Fase 4 — Autenticação permanece concluída e fornece a identidade server-side e o `organizationId` que deverão ser utilizados pelas operações comerciais.
 
@@ -399,7 +424,7 @@ A Fase 5 foi organizada em:
 - 5.5 — Dashboard e consultas operacionais;
 - 5.6 — validação e fechamento da fase.
 
-Neste marco, nenhuma entrega funcional da Fase 5 é considerada concluída.
+Neste marco, a Fase 5 já possui entregas funcionais incrementais no módulo de Clientes, mas o **Gate 5.1 permanece aberto** e nenhuma subetapa 5.x é considerada concluída.
 
 A execução deverá preservar autorização server-side por organização, reutilização das regras de domínio existentes e separação entre interface, domínio, services e persistência.
 
