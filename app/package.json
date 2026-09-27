@@ -13,13 +13,17 @@
     "lint": "eslint .",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",
+    "prisma:ci:bootstrap-legacy": "tsx scripts/ci-bootstrap-legacy-migrations.ts",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:diff:check": "prisma migrate diff --exit-code --from-config-datasource --to-schema prisma/schema.prisma",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:persistence": "tsx scripts/persistence.integration.ts",
+    "test:auth:persistence": "node --conditions=react-server --import tsx scripts/auth.integration.ts",
+    "test:integration": "npm run test:persistence && npm run test:auth:persistence",
     "seed:dev": "tsx scripts/seed-dev.ts",
     "auth:bootstrap": "node --conditions=react-server --import tsx scripts/bootstrap-auth-user.ts",
-    "auth:cleanup": "node --conditions=react-server --import tsx scripts/auth-cleanup.ts",
-    "test:auth:persistence": "node --conditions=react-server --import tsx scripts/auth.integration.ts"
+    "auth:cleanup": "node --conditions=react-server --import tsx scripts/auth-cleanup.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
